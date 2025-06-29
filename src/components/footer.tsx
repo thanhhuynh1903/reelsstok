@@ -117,7 +117,27 @@ export default function Footer() {
   ]
 
   return (
+    
     <footer ref={footerRef} className="bg-gray-950 border-t border-gray-800 relative overflow-hidden">
+        {/* Newsletter signup */}
+        <div className="footer-section bg-gray-900/50 backdrop-blur-sm rounded-2xl p-8 mb-12 border border-gray-800 md:py-18 py-8">
+          <div className="max-w-2xl mx-auto text-center">
+            <h3 className="text-2xl font-bold text-white mb-4">Stay in the Loop</h3>
+            <p className="text-gray-400 mb-6">
+              Get the latest updates on new features, trending creators, and platform news.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="flex-1 bg-gray-800/50 border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors"
+              />
+              <button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 whitespace-nowrap">
+                Subscribe
+              </button>
+            </div>
+          </div>
+        </div>
       {/* Background elements */}
       <div className="absolute inset-0">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
@@ -210,26 +230,6 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
-        </div>
-
-        {/* Newsletter signup */}
-        <div className="footer-section bg-gray-900/50 backdrop-blur-sm rounded-2xl p-8 mb-12 border border-gray-800">
-          <div className="max-w-2xl mx-auto text-center">
-            <h3 className="text-2xl font-bold text-white mb-4">Stay in the Loop</h3>
-            <p className="text-gray-400 mb-6">
-              Get the latest updates on new features, trending creators, and platform news.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 bg-gray-800/50 border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors"
-              />
-              <button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 whitespace-nowrap">
-                Subscribe
-              </button>
-            </div>
           </div>
         </div>
 
