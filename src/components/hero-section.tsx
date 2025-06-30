@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react"
 import { gsap } from "gsap"
 import { Play, TrendingUp, Users, Video } from "lucide-react"
+import Link from "next/link";
 
 export default function HeroSection() {
   const heroRef = useRef<HTMLDivElement>(null)
@@ -60,10 +61,10 @@ export default function HeroSection() {
         </p>
 
         <div className="hero-buttons flex flex-col sm:flex-row gap-4 justify-center mb-16">
-          <button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2">
+          <Link href={"/video"} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2">
             <Play className="w-5 h-5" />
             Start Watching
-          </button>
+          </Link>
           <button className="border border-gray-600 hover:border-purple-500 px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2">
             <Video className="w-5 h-5" />
             Upload Video
