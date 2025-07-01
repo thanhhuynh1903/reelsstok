@@ -3,21 +3,8 @@
 import { useState, useRef, useEffect } from "react"
 import { Play, Heart, Share, MessageCircle, MoreVertical } from "lucide-react"
 import { gsap } from "gsap"
-
-interface Video {
-  id: number
-  title: string
-  creator: string
-  views: string
-  likes: string
-  thumbnail: string
-  duration: string
-}
-
-interface VideoCardProps {
-  video: Video
-}
-
+import type { VideoCardProps } from "@/types/video-typs"
+import Link from "next/link"
 export default function VideoCard({ video }: VideoCardProps) {
   const [isHovered, setIsHovered] = useState(false)
   const [isLiked, setIsLiked] = useState(false)
@@ -58,6 +45,7 @@ export default function VideoCard({ video }: VideoCardProps) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      <Link href={`/video`} className="block h-full">
       {/* Thumbnail */}
       <div className="relative aspect-[3/4]">
         <img src={video.thumbnail || "/placeholder.svg"} alt={video.title} className="w-full h-full object-cover" />
@@ -103,6 +91,7 @@ export default function VideoCard({ video }: VideoCardProps) {
           <MessageCircle className="w-4 h-4 text-white" />
         </button>
       </div>
+      </Link>
     </div>
   )
 }

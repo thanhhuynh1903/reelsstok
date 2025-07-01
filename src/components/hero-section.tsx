@@ -41,7 +41,7 @@ export default function HeroSection() {
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-pink-900/20" />
 
-      {/* Animated background elements */}
+      {/*background elements decoration*/}
       <div className="absolute inset-0">
         <div className="floating absolute top-20 left-10 w-20 h-20 bg-purple-500/10 rounded-full blur-xl" />
         <div className="floating absolute top-40 right-20 w-32 h-32 bg-pink-500/10 rounded-full blur-xl" />
@@ -61,7 +61,7 @@ export default function HeroSection() {
         </p>
 
         <div className="hero-buttons flex flex-col sm:flex-row gap-4 justify-center mb-16">
-          <Link href={"/video"} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2">
+          <Link href={"/videolist"} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2">
             <Play className="w-5 h-5" />
             Start Watching
           </Link>

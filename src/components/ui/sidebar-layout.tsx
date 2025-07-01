@@ -4,15 +4,16 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 import { Sidebar as ModernSidebar } from "./sidebar"
-
+import { usePathname } from "next/navigation"
 interface SidebarLayoutProps {
   children: React.ReactNode
 }
 
+
 export function SidebarLayout({ children }: SidebarLayoutProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
-
+  const currentUrl = usePathname();
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768)
@@ -26,7 +27,7 @@ export function SidebarLayout({ children }: SidebarLayoutProps) {
     return () => window.removeEventListener("resize", checkMobile)
   }, [])
 
-  return (
+  return currentUrl !== "/" ? (
     <div className="min-h-screen bg-black text-white">
       <ModernSidebar isCollapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
 
@@ -39,5 +40,9 @@ export function SidebarLayout({ children }: SidebarLayoutProps) {
         <div className="fixed inset-0 bg-black/50 z-40 md:hidden" onClick={() => setSidebarCollapsed(true)} />
       )}
     </div>
+  ) : (
+    <>
+      {children}
+    </>
   )
 }
