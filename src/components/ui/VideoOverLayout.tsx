@@ -1,5 +1,6 @@
 import React from 'react'
 import { VolumeX, Volume2, MoreHorizontal, X, Play, Pause } from 'lucide-react'
+import Link from 'next/link'
 export default function VideoOverLayout({ isMuted = true, isLive = true, channelName = "Channel Name", videoTitle = "Video Title", viewCount = 1234, isPlaying = false }) {
     return (
         <div> {/* Video Overlay UI */}
@@ -13,9 +14,6 @@ export default function VideoOverLayout({ isMuted = true, isLive = true, channel
                         >
                             {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
                         </button>
-                        <div className="bg-black/50 backdrop-blur-sm rounded-full px-4 py-2">
-                            <h2 className="font-semibold text-lg">{channelName}</h2>
-                        </div>
                         {isLive && (
                             <div className="bg-red-600 rounded-full px-3 py-1 text-sm font-medium flex items-center">
                                 <div className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></div>
@@ -48,15 +46,26 @@ export default function VideoOverLayout({ isMuted = true, isLive = true, channel
                 {/* Bottom Info */}
                 <div className="absolute bottom-4 left-4 right-4">
                     <div className="bg-black/50 backdrop-blur-sm rounded-xl p-4">
-                        <h3 className="font-bold text-xl mb-2">{videoTitle}</h3>
-                        <div className="flex items-center space-x-4 text-sm text-gray-300">
-                            <span>{viewCount} viewers</span>
-                            <span>•</span>
-                            <span className="flex items-center space-x-1">
-                                <span className="text-green-400">●</span>
-                                <span>Live now</span>
-                            </span>
-                        </div>
+                        <Link href="/channels/buildmaster" className='flex flex-row items-center space-y-2 space-x-4'>
+                            <div className="relative">
+                                <img
+                                    src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFdupUSSbQ3Zx2H3xcvQfH1UfcdYLjCL2a7Q&s"}
+                                    className="w-16 h-16 object-cover md:w-18 md:h-18 rounded-full border-4 border-black bg-gray-900"
+                                />
+                            </div>
+                            <div  className="flex-1">
+                                <h3 className="font-semibold text-xl">{channelName}</h3>
+                                <h2 className="font-bold text-sm mb-2">{videoTitle}</h2>
+                                <div className="flex items-center space-x-4 text-sm text-gray-300">
+                                    <span>{viewCount} viewers</span>
+                                    <span>•</span>
+                                    <span className="flex items-center space-x-1">
+                                        <span className="text-green-400">●</span>
+                                        <span>Live now</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </Link>
                         <div className="flex flex-wrap gap-2 mt-2">
                             {["#minecraft", "#building", "#tutorial", "#gaming", "#live"].map((tag) => (
                                 <span key={tag} className="bg-purple-600/30 text-purple-300 px-2 py-1 rounded-full text-xs">
