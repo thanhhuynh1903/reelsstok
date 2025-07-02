@@ -31,7 +31,7 @@ interface SidebarProps {
 interface MenuItem {
     id: string
     label: string
-    icon: React.ComponentType<any>
+    icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
     href?: string
     badge?: string | number
     children?: MenuItem[]

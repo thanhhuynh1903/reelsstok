@@ -1,7 +1,7 @@
 import React from 'react'
 import { Heart, MessageCircle, Bookmark, Share } from 'lucide-react'
-
-export default function EngagementButton({ isLiked = false, isSaved = false, handleLike, handleSave }: any) {
+import type { EngagementButtonProps } from '@/types/engagement-types'
+export default function EngagementButton({ isLiked = false, isSaved = false, handleLike, handleSave }: EngagementButtonProps) {
     const objectbutton = [{
         name: "Like",
         icon: <Heart className="w-6 h-6" />,

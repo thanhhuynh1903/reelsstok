@@ -16,35 +16,15 @@ import EngagementButton from "./EngagementButton"
 import CommentLayout from "./CommentLayout"
 import Scrollreel from "../scrollreel"
 import './styles.css'
-interface Comment {
-  id: string
-  username: string
-  displayName: string
-  avatar: string
-  message: string
-  timestamp: string
-  likes: number
-}
-
-interface GamingVideoPlayerProps {
-  videoTitle?: string
-  channelName?: string
-  viewCount?: string
-  isLive?: boolean
-}
+import type { GamingVideoPlayerProps, Comment } from "@/types/comment-types"
 
 export function LiveLayout({
-  videoTitle = "Epic Minecraft Build Tutorial",
-  channelName = "GameMaster",
-  viewCount = "12.5K",
-  isLive = true,
 }: GamingVideoPlayerProps) {
-  const [isPlaying, setIsPlaying] = useState(true)
-  const [isMuted, setIsMuted] = useState(false)
-  const [isLiked, setIsLiked] = useState(false)
-  const [isSaved, setIsSaved] = useState(false)
-  const [showComments, setShowComments] = useState(true)
-  const [newComment, setNewComment] = useState("")
+  // const [isMuted, setIsMuted] = useState<boolean>(false)
+  const [isLiked, setIsLiked] = useState<boolean>(false)
+  const [isSaved, setIsSaved] = useState<boolean>(false)
+  const [showComments, setShowComments] = useState<boolean>(true)
+  const [newComment, setNewComment] = useState<string>("")
   const [comments, setComments] = useState<Comment[]>([
     {
       id: "1",
@@ -172,7 +152,7 @@ export function LiveLayout({
       <div className="flex-1 relative pl-8 py-8">
         <div ref={videoRef} className="relative h-full bg-gray-900 rounded-lg overflow-hidden">
           {/* Video Background */}
-          <VideoSection isMuted={isMuted} />
+          <VideoSection />
           <VideoOverLayout />
         </div>
 
@@ -202,7 +182,7 @@ export function LiveLayout({
           <div className="overflow-y-scroll hide-scrollbar">
             <div ref={commentsRef} className="flex-1 overflow-y-auto p-4 space-y-4 overflow-hidden">
               {comments.map((comment) => (
-                <CommentLayout commentid={comment.id} avatar={comment.avatar} username={comment.displayName} timestamp={comment.timestamp} like={comment.likes} message={comment.message} />
+                <CommentLayout key={comment.id} avatar={comment.avatar} username={comment.displayName} timestamp={comment.timestamp} like={comment.likes} message={comment.message} />
               ))}
             </div>
           </div>

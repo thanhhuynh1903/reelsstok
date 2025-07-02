@@ -11,3 +11,10 @@ interface Video {
 export interface VideoCardProps {
   video: Video
 }
+
+export interface GamingVideoPlayerProps {
+  videoTitle?: string
+  channelName?: string
+  viewCount?: string
+  isLive?: boolean
+}

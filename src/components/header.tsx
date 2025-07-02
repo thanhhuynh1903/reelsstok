@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Search, Menu, X, Bell, Upload } from "lucide-react"
+import { Search, Menu, X, Upload } from "lucide-react"
 import { gsap } from "gsap"
 import LogoIcon from "./LogoIcon"
 export default function Header() {

@@ -1,8 +1,9 @@
 import React from 'react'
 import { Heart } from 'lucide-react'
-export default function CommentLayout({ commentid, avatar, username, timestamp, like, message }: any) {
+import type { CommentLayoutProps } from '@/types/comment-types'
+export default function CommentLayout({ key, avatar, username, timestamp, like, message }: CommentLayoutProps) {
     return (
-        <div key={commentid} className="comment-item flex space-x-3 group">
+        <div key={key} className="comment-item flex space-x-3 group">
             <img
                 src={avatar || "/placeholder.svg"}
                 alt={username}

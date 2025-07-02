@@ -156,7 +156,7 @@ export default function Footer() {
             </div>
             <p className="text-gray-400 mb-6 max-w-md">
               Join millions of creators sharing their stories through short, engaging videos. Discover trending content
-              and build your community on the world's fastest-growing video platform.
+              and build your community on the world&apos;s fastest-growing video platform.
             </p>
 
             {/* Contact info */}
