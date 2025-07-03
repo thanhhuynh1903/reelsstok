@@ -21,7 +21,7 @@ interface PublishSettingsProps {
   onPublish: () => void
 }
 
-export function PublishSettings({ videoData, onUpdate, onPublish }: PublishSettingsProps) {
+export function PublishSettings({ videoData, onPublish }: PublishSettingsProps) {
   const [notifySubscribers, setNotifySubscribers] = useState(true)
   const [addToPlaylist, setAddToPlaylist] = useState(false)
   const [selectedPlaylist, setSelectedPlaylist] = useState("")

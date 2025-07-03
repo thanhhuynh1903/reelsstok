@@ -237,7 +237,7 @@ export function VideoDetails({ videoData, onUpdate, videoFile }: VideoDetailsPro
                       name="visibility"
                       value={option.value}
                       checked={videoData.visibility === option.value}
-                      onChange={(e) => onUpdate({ ...videoData, visibility: e.target.value as any })}
+                      onChange={(e) => onUpdate({ ...videoData, visibility: e.target.value as "public" | "private" | "unlisted" })}
                       className="mt-1"
                     />
                     <IconComponent className="w-5 h-5 text-gray-400 mt-0.5" />

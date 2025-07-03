@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState, useRef, useEffect } from "react"
-import { Play, Pause, Volume2, VolumeX, RotateCcw, Crop } from "lucide-react"
+import { Play, Pause, Volume2, VolumeX } from "lucide-react"
 
 interface VideoFile {
   file: File

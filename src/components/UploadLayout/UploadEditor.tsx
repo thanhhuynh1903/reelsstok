@@ -16,7 +16,7 @@ interface VideoEditorProps {
   onUpdate: (videoFile: VideoFile) => void
 }
 
-export function VideoEditor({ videoFile, onUpdate }: VideoEditorProps) {
+export function VideoEditor({ videoFile }: VideoEditorProps) {
   const [activeTab, setActiveTab] = useState("trim")
   const [trimStart, setTrimStart] = useState(0)
   const [trimEnd, setTrimEnd] = useState(videoFile.duration)
