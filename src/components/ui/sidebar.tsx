@@ -21,6 +21,7 @@ import {
     Menu,
     X,
 } from "lucide-react"
+import { useRouter } from "next/navigation"
 import './styles.css'
 interface SidebarProps {
     isCollapsed?: boolean
@@ -52,10 +53,16 @@ export function Sidebar({ isCollapsed = false, onToggle, className = "" }: Sideb
     const [expandedGroups, setExpandedGroups] = useState<string[]>(["main"])
     const [searchQuery, setSearchQuery] = useState("")
     const [showUserMenu, setShowUserMenu] = useState(false)
-
+    const router = useRouter()
     const sidebarRef = useRef<HTMLDivElement>(null)
     const contentRef = useRef<HTMLDivElement>(null)
-
+    const handleNavigate = (href: string) => () => {
+        if (href) {
+            router.push(href)
+        }
+    }
+    //Explain router.push
+    // router.push is a Next.js function that allows you to programmatically navigate to a different route in your application. It updates the URL and renders the corresponding page without a full page reload, maintaining the single-page application (SPA) behavior. This is useful for navigation after actions like form submissions or button clicks.
     const userProfile: UserProfile = {
         name: "Alex Johnson",
         username: "@alexj",
@@ -314,7 +321,6 @@ export function Sidebar({ isCollapsed = false, onToggle, className = "" }: Sideb
             <div className="overflow-y-scroll hide-scrollbar">
                 {/* Content */}
                 <div ref={contentRef} className="flex-1 overflow-y-auto p-4 space-y-6 overflow-hidden"
-                    style={{}}
                 >
                     {/* Main Navigation */}
                     <div>
@@ -339,7 +345,7 @@ export function Sidebar({ isCollapsed = false, onToggle, className = "" }: Sideb
                         <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-xl p-4 border border-purple-500/20">
                             <h4 className="font-semibold text-white mb-2">Create Content</h4>
                             <p className="text-sm text-gray-400 mb-3">Share your creativity with the world</p>
-                            <button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105">
+                            <button onClick={handleNavigate("/upload")} className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105">
                                 Upload Video
                             </button>
                         </div>

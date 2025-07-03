@@ -4,10 +4,10 @@ import { useEffect, useRef } from "react"
 import { gsap } from "gsap"
 import { Play, TrendingUp, Users, Video } from "lucide-react"
 import Link from "next/link";
-
+import { useRouter } from "next/navigation";
 export default function HeroSection() {
   const heroRef = useRef<HTMLDivElement>(null)
-
+  const router = useRouter()
   useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline()
@@ -35,7 +35,11 @@ export default function HeroSection() {
 
     return () => ctx.revert()
   }, [])
-
+  const handleNavigate = (href: string) => () => {
+    if (href) {
+      router.push(href)
+    }
+  }
   return (
     <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background gradient */}
@@ -65,7 +69,7 @@ export default function HeroSection() {
             <Play className="w-5 h-5" />
             Start Watching
           </Link>
-          <button className="border border-gray-600 hover:border-purple-500 px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2">
+          <button onClick={handleNavigate("/upload")} className="border border-gray-600 hover:border-purple-500 px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2">
             <Video className="w-5 h-5" />
             Upload Video
           </button>
