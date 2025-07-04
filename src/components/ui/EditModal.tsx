@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useRef } from "react"
-import { Camera, Upload, Save, User, Link, MapPin } from "lucide-react"
+import { useState } from "react"
+import { Save, Link, MapPin } from "lucide-react"
 import { Button } from "./Button"
 import { Input } from "./Input"
 import { Label } from "@/components/ui/label"
@@ -35,19 +35,19 @@ export function EditProfileModal({ isOpen, onClose, profileData, onSave }: EditP
       },
     }))
   }
-
-  const handleImageUpload = (type: "avatar" | "banner", file: File) => {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      const result = e.target?.result as string
-      if (type === "avatar") {
-        setFormData((prev) => ({ ...prev, avatar: result }))
-      } else {
-        setFormData((prev) => ({ ...prev, banner: result }))
-      }
-    }
-    reader.readAsDataURL(file)
-  }
+//Optional for edit 
+//   const handleImageUpload = (type: "avatar" | "banner", file: File) => {
+//     const reader = new FileReader()
+//     reader.onload = (e) => {
+//       const result = e.target?.result as string
+//       if (type === "avatar") {
+//         setFormData((prev) => ({ ...prev, avatar: result }))
+//       } else {
+//         setFormData((prev) => ({ ...prev, banner: result }))
+//       }
+//     }
+//     reader.readAsDataURL(file)
+//   }
 
   const handleSave = async () => {
     setIsLoading(true)
