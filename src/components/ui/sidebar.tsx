@@ -22,6 +22,7 @@ import {
     X,
 } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import './styles.css'
 interface SidebarProps {
     isCollapsed?: boolean
@@ -49,11 +50,11 @@ interface UserProfile {
 
 export function Sidebar({ isCollapsed = false, onToggle, className = "" }: SidebarProps) {
     const [collapsed, setCollapsed] = useState(isCollapsed)
-    const [activeItem, setActiveItem] = useState("home")
     const [expandedGroups, setExpandedGroups] = useState<string[]>(["main"])
     const [searchQuery, setSearchQuery] = useState("")
     const [showUserMenu, setShowUserMenu] = useState(false)
     const router = useRouter()
+    const pathname = usePathname()
     const sidebarRef = useRef<HTMLDivElement>(null)
     const contentRef = useRef<HTMLDivElement>(null)
     const handleNavigate = (href: string) => () => {
@@ -70,21 +71,20 @@ export function Sidebar({ isCollapsed = false, onToggle, className = "" }: Sideb
         followers: "12.5K",
         following: "892",
     }
-
+ 
     const menuItems: { [key: string]: MenuItem[] } = {
         main: [
             {
                 id: "home",
                 label: "Home",
                 icon: Home,
-                href: "/",
-                isActive: true,
+                href: "/videolist",
             },
             {
                 id: "explore",
                 label: "Explore",
                 icon: Compass,
-                href: "/explore",
+                href: "/video",
             },
             {
                 id: "trending",
@@ -130,7 +130,7 @@ export function Sidebar({ isCollapsed = false, onToggle, className = "" }: Sideb
                 id: "profile",
                 label: "Profile",
                 icon: User,
-                href: "/profile",
+                href: "/channel/profile",
             },
             {
                 id: "notifications",
@@ -143,7 +143,7 @@ export function Sidebar({ isCollapsed = false, onToggle, className = "" }: Sideb
                 id: "settings",
                 label: "Settings",
                 icon: Settings,
-                href: "/settings",
+                href: "/profile/edit",
             },
         ],
     }
@@ -155,10 +155,6 @@ export function Sidebar({ isCollapsed = false, onToggle, className = "" }: Sideb
 
     const toggleGroup = (groupId: string) => {
         setExpandedGroups((prev) => (prev.includes(groupId) ? prev.filter((id) => id !== groupId) : [...prev, groupId]))
-    }
-
-    const handleItemClick = (itemId: string) => {
-        setActiveItem(itemId)
     }
 
     useEffect(() => {
@@ -207,16 +203,8 @@ export function Sidebar({ isCollapsed = false, onToggle, className = "" }: Sideb
         return () => ctx.revert()
     }, [collapsed])
 
-    useEffect(() => {
-        gsap.fromTo(
-            ".menu-item",
-            { x: -30, opacity: 0 },
-            { x: 0, opacity: 1, duration: 0.5, stagger: 0.05, ease: "power2.out" },
-        )
-    }, [])
-
     const renderMenuItem = (item: MenuItem, level = 0) => {
-        const isActive = activeItem === item.id
+        const isActive = item.href === pathname;
         const hasChildren = item.children && item.children.length > 0
         const isExpanded = expandedGroups.includes(item.id)
 
@@ -224,40 +212,44 @@ export function Sidebar({ isCollapsed = false, onToggle, className = "" }: Sideb
             <div key={item.id} className="menu-item">
                 <button
                     onClick={() => {
-                        handleItemClick(item.id)
+                        if (item?.href) {
+                            handleNavigate(item?.href)()
+                        }
                         if (hasChildren) {
                             toggleGroup(item.id)
                         }
                     }}
                     className={`
-            w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 group
-            ${level > 0 ? "ml-6 pl-8" : ""}
-            ${isActive
+                        w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 group
+                        ${level > 0 ? "ml-6 pl-8" : ""}
+                        ${isActive
                             ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg"
                             : "hover:bg-gray-800/50 text-gray-300 hover:text-white"
                         }
-          `}
+                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950
+                    `}
+                    tabIndex={0}
+                    aria-current={isActive ? "page" : undefined}
+                    type="button"
                 >
                     <div className="flex items-center space-x-3">
                         <item.icon
-                            className={`w-5 h-5 transition-colors ${isActive ? "text-white" : "text-gray-400 group-hover:text-white"
-                                }`}
+                            className={`w-5 h-5 transition-colors ${isActive ? "text-white" : "text-gray-400 group-hover:text-white"}`}
                         />
                         {!collapsed && (
                             <span className={`sidebar-label font-medium ${isActive ? "text-white" : ""}`}>{item.label}</span>
                         )}
                     </div>
-
                     <div className="flex items-center space-x-2">
                         {item.badge && !collapsed && (
                             <span
                                 className={`
-                  sidebar-badge px-2 py-1 rounded-full text-xs font-medium
-                  ${typeof item.badge === "number"
+                                    sidebar-badge px-2 py-1 rounded-full text-xs font-medium
+                                    ${typeof item.badge === "number"
                                         ? "bg-red-500 text-white"
                                         : "bg-orange-500/20 text-orange-400 border border-orange-500/30"
                                     }
-                `}
+                                `}
                             >
                                 {item.badge}
                             </span>
@@ -269,7 +261,6 @@ export function Sidebar({ isCollapsed = false, onToggle, className = "" }: Sideb
                         )}
                     </div>
                 </button>
-
                 {hasChildren && isExpanded && !collapsed && (
                     <div className="mt-2 space-y-1">{item.children?.map((child) => renderMenuItem(child, level + 1))}</div>
                 )}
@@ -320,8 +311,7 @@ export function Sidebar({ isCollapsed = false, onToggle, className = "" }: Sideb
             )}
             <div className="overflow-y-scroll hide-scrollbar">
                 {/* Content */}
-                <div ref={contentRef} className="flex-1 overflow-y-auto p-4 space-y-6 overflow-hidden"
-                >
+                <div ref={contentRef} className="flex-1 overflow-y-auto p-4 space-y-6 overflow-hidden">
                     {/* Main Navigation */}
                     <div>
                         {!collapsed && <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Main</h3>}

@@ -5,7 +5,7 @@ import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import VideoCard from "@/components/video-card"
 import { Filter, Grid, List, Upload } from "lucide-react"
-
+import { useRouter } from "next/navigation"
 gsap.registerPlugin(ScrollTrigger)
 
 interface Video {
@@ -100,9 +100,11 @@ export function ChannelVideos({ channelData, isOwnChannel }: ChannelVideosProps)
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
   const [sortBy, setSortBy] = useState("newest")
   const [filterBy, setFilterBy] = useState("all")
-
+  const router = useRouter();
   const gridRef = useRef<HTMLDivElement>(null)
-
+  const handleNavigation = () => {
+    router.push("/upload")
+  }
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -140,7 +142,7 @@ export function ChannelVideos({ channelData, isOwnChannel }: ChannelVideosProps)
         </div>
 
         {isOwnChannel && (
-          <button className="bg-purple-600 hover:bg-purple-700 px-6 py-2 rounded-full font-medium transition-colors flex items-center space-x-2 self-start">
+          <button onClick={handleNavigation} className="bg-purple-600 hover:bg-purple-700 px-6 py-2 rounded-full font-medium transition-colors flex items-center space-x-2 self-start">
             <Upload className="w-4 h-4" />
             <span>Upload Video</span>
           </button>

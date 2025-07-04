@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react"
 import { gsap } from "gsap"
+import { useRouter } from "next/navigation"
 import {
     UserPlus,
     UserCheck,
@@ -15,7 +16,8 @@ import {
     Settings,
     Radio,
 } from "lucide-react"
-
+import { EditProfileModal } from "../ui/EditModal"
+import type { ProfileData } from "@/types/profile-types"
 interface ChannelData {
     username: string
     displayName: string
@@ -49,6 +51,26 @@ export function ChannelHeader({ channelData, isOwnChannel, isFollowing, onFollow
     const [showFullBio, setShowFullBio] = useState(false)
     const [notificationsOn, setNotificationsOn] = useState(false)
     const [showShareMenu, setShowShareMenu] = useState(false)
+    const router = useRouter()
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [profileData, setProfileData] = useState({
+        displayName: channelData.displayName,
+        username: channelData.username,
+        bio: channelData.bio,
+        avatar: channelData.avatar,
+        banner: channelData.banner,
+        location: "", // Add location if needed
+        website: "", // Add website if needed
+        socialLinks: channelData.socialLinks,
+    })
+
+    const handleSave = (updatedData: ProfileData) => {
+        setProfileData(updatedData)
+        setIsModalOpen(false)
+    }
+    const handleNavigate = () => {
+        router.push(`/profile/edit/`)
+    }
 
     const followButtonRef = useRef<HTMLButtonElement>(null)
     const bellButtonRef = useRef<HTMLButtonElement>(null)
@@ -215,11 +237,17 @@ export function ChannelHeader({ channelData, isOwnChannel, isFollowing, onFollow
                         <div className="flex items-center space-x-3">
                             {isOwnChannel ? (
                                 <>
-                                    <button className="bg-purple-600 hover:bg-purple-700 px-6 py-2 rounded-full font-medium transition-colors flex items-center space-x-2">
+                                    <button onClick={() => setIsModalOpen(true)} className="bg-purple-600 hover:bg-purple-700 px-6 py-2 rounded-full font-medium transition-colors flex items-center space-x-2">
                                         <Edit className="w-4 h-4" />
                                         <span>Edit Profile</span>
                                     </button>
-                                    <button className="bg-gray-800 hover:bg-gray-700 p-2 rounded-full transition-colors">
+                                    <EditProfileModal
+                                        isOpen={isModalOpen}
+                                        onClose={() => setIsModalOpen(false)}
+                                        profileData={profileData}
+                                        onSave={handleSave}
+                                    />
+                                    <button onClick={handleNavigate} className="bg-gray-800 hover:bg-gray-700 p-2 rounded-full transition-colors">
                                         <Settings className="w-5 h-5" />
                                     </button>
                                 </>
