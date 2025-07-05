@@ -12,19 +12,10 @@ export default function VideoOverLayout({ isMuted = true, isLive = true, channel
         if (descRef.current) {
             // Get natural height of content
             const contentHeight = descRef.current.scrollHeight;
-
-            if (isOpenDescription) {
-                // Minimized state animation
-                gsap.fromTo(descRef.current,
-                    { height: contentHeight},
-                    { height: 80, duration: 0.4, ease: "power2.out" }
-                )
-            } else {
-                gsap.fromTo(descRef.current,
-                    { height: 80 },
-                    { height: contentHeight, duration: 0.4, ease: "power2.out" }
-                )
-            }
+            gsap.fromTo(descRef.current,
+                { height: 80 },
+                { height: contentHeight, duration: 0.4, ease: "power2.out" }
+            )
         }
     }, [isOpenDescription])
 
