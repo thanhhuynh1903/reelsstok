@@ -1,7 +1,5 @@
 "use client"
 
-import type React from "react"
-
 import { useState, useRef } from "react"
 import { Upload, X, Save, ImageIcon } from "lucide-react"
 import { Button } from "../ui/Button"
@@ -98,7 +96,8 @@ export function UploadImageModal({ isOpen, onClose, onSave, type, currentImage }
     onClose()
   }
 
-  const removeImage = () => {
+  const removeImage = (e: React.MouseEvent) => {
+    e.stopPropagation()
     setSelectedFile(null)
     setPreviewUrl("")
     if (fileInputRef.current) {
@@ -106,12 +105,19 @@ export function UploadImageModal({ isOpen, onClose, onSave, type, currentImage }
     }
   }
 
+  const triggerFileInput = () => {
+    fileInputRef.current?.click()
+  }
+
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-md bg-gray-900 border-gray-800">
+      <DialogContent className="max-w-md bg-gray-900 border border-gray-700 rounded-xl">
         <DialogHeader>
-          <DialogTitle className="text-white">Upload {isAvatar ? "Profile Picture" : "Banner Image"}</DialogTitle>
-          <DialogDescription className="text-gray-400">
+          <DialogTitle className="text-white flex items-center gap-2">
+            <ImageIcon className="w-5 h-5 text-purple-400" />
+            <span>Upload {isAvatar ? "Profile Picture" : "Banner Image"}</span>
+          </DialogTitle>
+          <DialogDescription className="text-gray-400 pt-2">
             {isAvatar
               ? "Choose a square image for your profile picture"
               : "Choose a wide image for your channel banner"}
@@ -119,41 +125,58 @@ export function UploadImageModal({ isOpen, onClose, onSave, type, currentImage }
         </DialogHeader>
 
         <div className="space-y-4">
-          {/* Upload Area */}
+          {/* Upload Area - Fixed click handler */}
           <div
-            className={`relative border-2 border-dashed rounded-lg p-6 transition-colors ${
-              dragActive ? "border-purple-500 bg-purple-500/10" : "border-gray-600 hover:border-gray-500"
+            className={`relative border-2 border-dashed rounded-lg p-6 transition-all ${
+              dragActive 
+                ? "border-purple-500 bg-purple-900/20" 
+                : "border-gray-700 hover:border-gray-500 bg-gray-800/30"
             }`}
             onDrop={handleDrop}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
+            onClick={triggerFileInput}
+            style={{ cursor: "pointer" }}
           >
             {previewUrl ? (
-              <div className="relative">
+              <div className="relative w-full h-full">
                 <div
                   className={`mx-auto overflow-hidden ${
-                    isAvatar ? "w-32 h-32 rounded-full" : "w-full h-24 rounded-lg"
+                    isAvatar ? "w-32 h-32 rounded-full" : "w-full h-32 rounded-lg"
                   }`}
                 >
-                  <img src={previewUrl || "/placeholder.svg"} alt="Preview" className="w-full h-full object-cover" />
+                  <img 
+                    src={previewUrl} 
+                    alt="Preview" 
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <Button
                   variant="destructive"
                   size="icon-sm"
-                  className="absolute -top-2 -right-2 rounded-full"
+                  className="absolute top-0 right-0 rounded-full -mt-2 -mr-2"
                   onClick={removeImage}
                 >
                   <X className="w-3 h-3" />
                 </Button>
+                <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 hover:opacity-100 transition-opacity">
+                  <div className="text-white text-sm font-medium bg-gray-800/80 px-3 py-1.5 rounded-full">
+                    Click to change
+                  </div>
+                </div>
               </div>
             ) : (
-              <div className="text-center">
-                <ImageIcon className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-                <p className="text-gray-300 mb-2">Drag and drop an image here, or click to select</p>
+              <div className="text-center flex flex-col items-center justify-center h-full">
+                <ImageIcon className="w-12 h-12 mx-auto mb-4 text-gray-500" />
+                <p className="text-gray-300 mb-2 font-medium">Drag and drop an image here</p>
+                <p className="text-gray-400 text-sm mb-4">or click to browse files</p>
                 <Button
                   variant="outline"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="border-gray-600 text-gray-300 hover:bg-gray-800"
+                  className="border-gray-600 text-gray-300 hover:bg-gray-700/50"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    triggerFileInput()
+                  }}
                 >
                   <Upload className="w-4 h-4 mr-2" />
                   Choose File
@@ -171,38 +194,52 @@ export function UploadImageModal({ isOpen, onClose, onSave, type, currentImage }
           </div>
 
           {/* File Info */}
-          <div className="text-xs text-gray-500 space-y-1">
-            <p>• Recommended size: {recommendedSize}</p>
-            <p>• Maximum file size: {maxSize / (1024 * 1024)}MB</p>
-            <p>• Supported formats: JPG, PNG, GIF</p>
+          <div className="text-xs text-gray-400 space-y-1 bg-gray-800/40 rounded-lg p-3 border border-gray-700">
+            <div className="flex items-center">
+              <div className="w-2 h-2 rounded-full bg-purple-500 mr-2"></div>
+              <p>Recommended size: <span className="text-white">{recommendedSize}</span></p>
+            </div>
+            <div className="flex items-center">
+              <div className="w-2 h-2 rounded-full bg-purple-500 mr-2"></div>
+              <p>Maximum file size: <span className="text-white">{maxSize / (1024 * 1024)}MB</span></p>
+            </div>
+            <div className="flex items-center">
+              <div className="w-2 h-2 rounded-full bg-purple-500 mr-2"></div>
+              <p>Supported formats: <span className="text-white">JPG, PNG, GIF</span></p>
+            </div>
           </div>
 
           {selectedFile && (
-            <div className="bg-gray-800 rounded-lg p-3">
+            <div className="bg-gray-800 rounded-lg p-3 border border-gray-700">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-white text-sm font-medium">{selectedFile.name}</p>
+                  <p className="text-white text-sm font-medium truncate max-w-[200px]">
+                    {selectedFile.name}
+                  </p>
                   <p className="text-gray-400 text-xs">{(selectedFile.size / (1024 * 1024)).toFixed(2)} MB</p>
                 </div>
-                <div className="text-green-400 text-xs">Ready to upload</div>
+                <div className="flex items-center gap-2 text-green-400 text-xs">
+                  <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+                  Ready to upload
+                </div>
               </div>
             </div>
           )}
         </div>
 
-        <DialogFooter className="flex gap-2">
+        <DialogFooter className="flex gap-2 mt-2">
           <Button
             variant="outline"
             onClick={handleClose}
             disabled={isLoading}
-            className="border-gray-700 text-white hover:bg-gray-800 bg-transparent"
+            className="border-gray-700 text-white hover:bg-gray-800 bg-gray-800/50"
           >
             Cancel
           </Button>
           <Button
             onClick={handleSave}
             disabled={!previewUrl || isLoading}
-            className="bg-purple-600 hover:bg-purple-700 text-white"
+            className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white"
           >
             {isLoading ? (
               <>
