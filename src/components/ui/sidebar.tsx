@@ -15,10 +15,10 @@ import {
     User,
     Bell,
     Search,
-    Plus,
     ChevronDown,
     ChevronRight,
     Menu,
+    Radio,
     X,
 } from "lucide-react"
 import { useRouter } from "next/navigation"
@@ -78,13 +78,13 @@ export function Sidebar({ isCollapsed = false, onToggle, className = "" }: Sideb
                 id: "home",
                 label: "Home",
                 icon: Home,
-                href: "/videolist",
+                href: "/video",
             },
             {
                 id: "explore",
                 label: "Explore",
                 icon: Compass,
-                href: "/video",
+                href: "/videolist",
             },
             {
                 id: "trending",
@@ -92,6 +92,13 @@ export function Sidebar({ isCollapsed = false, onToggle, className = "" }: Sideb
                 icon: TrendingUp,
                 href: "/trending",
                 badge: "🔥",
+            },
+            {
+                id: "live",
+                label: "Live",
+                icon: Radio,
+                href: "/live",
+                badge: "💥",
             },
             {
                 id: "following",
@@ -114,23 +121,23 @@ export function Sidebar({ isCollapsed = false, onToggle, className = "" }: Sideb
                 icon: Bookmark,
                 href: "/saved",
             },
-            {
-                id: "playlists",
-                label: "Playlists",
-                icon: Plus,
-                children: [
-                    { id: "playlist1", label: "My Favorites", icon: Heart },
-                    { id: "playlist2", label: "Watch Later", icon: Bookmark },
-                    { id: "playlist3", label: "Dance Videos", icon: TrendingUp },
-                ],
-            },
+            // {
+            //     id: "playlists",
+            //     label: "Playlists",
+            //     icon: Plus,
+            //     children: [
+            //         { id: "playlist1", label: "My Favorites", icon: Heart },
+            //         { id: "playlist2", label: "Watch Later", icon: Bookmark },
+            //         { id: "playlist3", label: "Dance Videos", icon: TrendingUp },
+            //     ],
+            // },
         ],
         account: [
             {
                 id: "profile",
                 label: "Profile",
                 icon: User,
-                href: "/channel/profile",
+                href: "/channels/buildmaster",
             },
             {
                 id: "notifications",
@@ -155,6 +162,11 @@ export function Sidebar({ isCollapsed = false, onToggle, className = "" }: Sideb
 
     const toggleGroup = (groupId: string) => {
         setExpandedGroups((prev) => (prev.includes(groupId) ? prev.filter((id) => id !== groupId) : [...prev, groupId]))
+    }
+
+    const handleSignOut = () => {
+    handleNavigate("/signin")();
+    router.refresh();
     }
 
     useEffect(() => {
@@ -389,13 +401,13 @@ export function Sidebar({ isCollapsed = false, onToggle, className = "" }: Sideb
                                 </div>
                             </div>
                             <div className="border-t border-gray-800/50 pt-2 mt-2">
-                                <button className="w-full text-left px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-colors">
+                                <button onClick={handleNavigate("/profile")} className="w-full text-left px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-colors">
                                     View Profile
                                 </button>
                                 <button className="w-full text-left px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-colors">
                                     Switch Account
                                 </button>
-                                <button className="w-full text-left px-3 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors">
+                                <button onClick={handleSignOut} className="w-full text-left px-3 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors">
                                     Sign Out
                                 </button>
                             </div>

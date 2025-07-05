@@ -1,6 +1,7 @@
 export interface EngagementButtonProps {
   isLiked?: boolean
   isSaved?: boolean
+  isLive?: boolean
   handleLike: () => void
   handleSave: () => void
 }

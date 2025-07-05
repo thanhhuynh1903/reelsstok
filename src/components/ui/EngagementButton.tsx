@@ -1,8 +1,32 @@
 import React from 'react'
-import { Heart, MessageCircle, Bookmark, Share } from 'lucide-react'
+import { Heart, MessageCircle, Bookmark, Share, MessageSquareHeart } from 'lucide-react'
 import type { EngagementButtonProps } from '@/types/engagement-types'
-export default function EngagementButton({ isLiked = false, isSaved = false, handleLike, handleSave }: EngagementButtonProps) {
-    const objectbutton = [{
+export default function EngagementButton({ isLiked = false, isLive = false, isSaved = false, handleLike, handleSave }: EngagementButtonProps) {
+    const objectLivebutton = [{
+        name: "Like",
+        icon: <Heart className="w-6 h-6" />,
+        count: "3.2K",
+        isActive: isLiked,
+        onClick: handleLike,
+        activeClass: <Heart className="w-6 h-6" fill="red" stroke="red" />,
+    },
+    {
+        name: "Comment",
+        icon: <MessageSquareHeart className="w-6 h-6" />,
+        count: "847",
+        isActive: false,
+        onClick: () => { },
+        activeClass: <MessageCircle className="w-6 h-6" />,
+    },
+    {
+        name: "Share",
+        icon: <Share className="w-6 h-6" />,
+        count: "234",
+        isActive: false,
+        onClick: () => { },
+        activeClass: <Share className="w-6 h-6" />,
+    }]
+    const objectVideobutton = [{
         name: "Like",
         icon: <Heart className="w-6 h-6" />,
         count: "3.2K",
@@ -33,22 +57,38 @@ export default function EngagementButton({ isLiked = false, isSaved = false, han
         onClick: () => { },
         activeClass: <Share className="w-6 h-6" />,
     }]
+    console.log("isLive", isLive);
+
     return (
         <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex flex-col space-y-4">
-            {objectbutton.map((button, index) => (
-                <div className='flex flex-col items-center' key={index}>
-                    <button
-                        onClick={button.onClick}
-                        className={`engagement-btn ${button.name === "Like" ? "like-btn" : "save-btn"} p-3 rounded-full backdrop-blur-sm transition-all transform hover:scale-110
+
+            {isLive ?
+                objectLivebutton.map((button, index) => (
+                    <div className='flex flex-col items-center' key={index}>
+                        <button
+                            onClick={button.onClick}
+                            className={`engagement-btn ${button.name === "Like" ? "like-btn" : "save-btn"} p-3 rounded-full backdrop-blur-sm transition-all transform hover:scale-110
                             }`}
-                    >
+                        >
+                            {button.isActive ? button.activeClass : button.icon}
+                        </button>
+                        <div className="text-center text-sm text-gray-300">{button.count}</div>
+                    </div>
+                )) :
+                objectVideobutton.map((button, index) => (
+                    <div className='flex flex-col items-center' key={index}>
+                        <button
+                            onClick={button.onClick}
+                            className={`engagement-btn ${button.name === "Like" ? "like-btn" : "save-btn"} p-3 rounded-full backdrop-blur-sm transition-all transform hover:scale-110
+                            }`}
+                        >
 
-                        {button.isActive ? button.activeClass : button.icon}
-                    </button>
-                    <div className="text-center text-sm text-gray-300">{button.count}</div>
-                </div>
+                            {button.isActive ? button.activeClass : button.icon}
+                        </button>
+                        <div className="text-center text-sm text-gray-300">{button.count}</div>
+                    </div>
 
-            ))}
+                ))}
         </div>
     )
 }

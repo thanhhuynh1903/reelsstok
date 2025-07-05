@@ -111,17 +111,6 @@ export function ChannelHeader({ channelData, isOwnChannel, isFollowing, onFollow
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                 </div>
 
-                {/* Live Indicator */}
-                {channelData.isLive && (
-                    <div className="absolute top-4 right-4 z-10">
-                        <div className="bg-red-600 rounded-full px-4 py-2 flex items-center space-x-2">
-                            <Radio className="w-4 h-4" />
-                            <span className="font-medium">LIVE</span>
-                            <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                        </div>
-                    </div>
-                )}
-
                 {/* Edit Banner Button (Own Channel) */}
                 {isOwnChannel && (
                     <button className="absolute top-4 right-4 bg-black/50 backdrop-blur-sm hover:bg-black/70 p-2 rounded-lg transition-colors">
@@ -175,6 +164,16 @@ export function ChannelHeader({ channelData, isOwnChannel, isFollowing, onFollow
                                             {badge}
                                         </span>
                                     ))}
+                                    {/* Live Indicator */}
+                                    {channelData.isLive && (
+                                        <div className="">
+                                            <div className="bg-red-600 rounded-full px-4 py-2 flex items-center space-x-2">
+                                                <Radio className="w-4 h-4" />
+                                                <span className="font-normal text-[12px]">LIVE</span>
+                                                <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                                 <p className="text-gray-400">@{channelData.username}</p>
                             </div>

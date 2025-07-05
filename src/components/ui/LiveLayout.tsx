@@ -18,8 +18,7 @@ import Scrollreel from "../scrollreel"
 import './styles.css'
 import type { GamingVideoPlayerProps, Comment } from "@/types/comment-types"
 
-export function LiveLayout({
-}: GamingVideoPlayerProps) {
+export function LiveLayout({ isLive}: GamingVideoPlayerProps) {
   // const [isMuted, setIsMuted] = useState<boolean>(false)
   const [isLiked, setIsLiked] = useState<boolean>(false)
   const [isSaved, setIsSaved] = useState<boolean>(false)
@@ -153,11 +152,11 @@ export function LiveLayout({
         <div ref={videoRef} className="relative h-full bg-gray-900 rounded-lg overflow-hidden">
           {/* Video Background */}
           <VideoSection />
-          <VideoOverLayout />
+          <VideoOverLayout isLive={isLive}/>
         </div>
 
         {/* Engagement Buttons */}
-        <EngagementButton handleLike={handleLike} isLiked={isLiked} handleSave={handleSave} isSaved={isSaved} />
+        <EngagementButton handleLike={handleLike} isLiked={isLiked} handleSave={handleSave} isSaved={isSaved} isLive={isLive} />
       </div>
 
       <Scrollreel />
@@ -168,7 +167,7 @@ export function LiveLayout({
           {/* Comments Header */}
           <div className="p-4 border-b border-gray-800">
             <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-lg">Live Chat ({comments.length})</h3>
+              <h3 className="font-semibold text-lg">{!isLive ? `Comments (${comments.length})` : `Live Chat (${comments.length})`}</h3>
               <button
                 onClick={() => setShowComments(false)}
                 className="p-1 hover:bg-gray-800 rounded transition-colors"
