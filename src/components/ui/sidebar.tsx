@@ -84,7 +84,7 @@ export function Sidebar({ isCollapsed = false, onToggle, className = "" }: Sideb
                 id: "explore",
                 label: "Explore",
                 icon: Compass,
-                href: "/videolist",
+                href: "/explore",
             },
             {
                 id: "trending",

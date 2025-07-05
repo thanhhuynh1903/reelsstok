@@ -1,5 +1,5 @@
 "use client"
-import { LiveLayout } from "@/components/ui/LiveLayout"
+import { LiveLayout } from "@/components/LiveLayout"
 export default function page() {
     return (
         <div className="min-h-screen bg-black">

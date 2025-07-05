@@ -10,12 +10,12 @@ import {
   Smile,
   AtSign,
 } from "lucide-react"
-import VideoSection from "./video-section"
-import VideoOverLayout from "./VideoOverLayout"
-import EngagementButton from "./EngagementButton"
-import CommentLayout from "./CommentLayout"
-import Scrollreel from "../scrollreel"
-import './styles.css'
+import VideoSection from "./ui/video-section"
+import VideoOverLayout from "./ui/VideoOverLayout"
+import EngagementButton from "./ui/EngagementButton"
+import CommentLayout from "./ui/CommentLayout"
+import Scrollreel from "./scrollreel"
+import '../components/ui/styles.css'
 import type { GamingVideoPlayerProps, Comment } from "@/types/comment-types"
 
 export function LiveLayout({ isLive}: GamingVideoPlayerProps) {

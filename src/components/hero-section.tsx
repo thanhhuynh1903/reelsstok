@@ -65,7 +65,7 @@ export default function HeroSection() {
         </p>
 
         <div className="hero-buttons flex flex-col sm:flex-row gap-4 justify-center mb-16">
-          <Link href={"/videolist"} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2">
+          <Link href={"/explore"} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2">
             <Play className="w-5 h-5" />
             Start Watching
           </Link>
