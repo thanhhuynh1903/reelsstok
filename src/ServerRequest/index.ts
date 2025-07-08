@@ -1,6 +1,5 @@
 import apiClient from "@/API/axios";
 import useAuth from "@/hooks/useAuth";
-import { AxiosResponse } from 'axios';
 
 export const login = async (email: string, password: string) => {
   return await apiClient
