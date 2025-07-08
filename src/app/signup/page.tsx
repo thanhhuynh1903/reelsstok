@@ -22,7 +22,7 @@ export default function SignUpPage() {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null)
   const dispatch = useAppDispatch();
-  const { loading, error } = useAppSelector((state: any) => state.login);
+  const { loading, error } = useAppSelector((state) => state.login);
   const [passwordError, setPasswordError] = useState<boolean>(false);
   //useAppSelector sẽ đọc dữ liệu state bộ nhớ của Redux, useSelector là 1 redux hook
   const handleRegister = (username: string, email: string, password: string) => {

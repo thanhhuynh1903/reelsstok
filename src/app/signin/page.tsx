@@ -19,7 +19,7 @@ export default function SignInPage() {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null)
   const dispatch = useAppDispatch();
-  const { loading, error, status } = useAppSelector((state: any) => state.login);
+  const { loading, error, status } = useAppSelector((state) => state.login);
   //useAppSelector sẽ đọc dữ liệu state bộ nhớ của Redux, useSelector là 1 redux hook
   const handleLogin = (email: string, password: string) => {
     dispatch(loginUser({ email, password }));

@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { register } from "@/ServerRequest";
 
 interface RegisterState {
@@ -19,7 +19,7 @@ const initialState: RegisterState = {
   status: null,
 };
 
-// Async thunk for login
+// Async thunk for register
 export const registerUser = createAsyncThunk<
   { username: string; email: string; password: string; status: number }, // Return type
   { username: string; email: string; password: string }, // Argument type
@@ -34,10 +34,10 @@ export const registerUser = createAsyncThunk<
     if (response.status === 200) {
       return { ...credentials, status: response.status };
     } else {
-      throw new Error("Login failed");
+      return rejectWithValue("Register failed");
     }
-  } catch (err: any) {
-    return rejectWithValue(err.status || "Login failed");
+  } catch {
+    return rejectWithValue("Register failed");
   }
 });
 
@@ -51,6 +51,7 @@ const registerSlice = createSlice({
       state.password = "";
       state.loading = false;
       state.error = null;
+      state.status = null;
     },
   },
   extraReducers: (builder) => {
@@ -65,10 +66,12 @@ const registerSlice = createSlice({
         state.username = action.payload.username;
         state.email = action.payload.email;
         state.password = action.payload.password;
+        state.status = action.payload.status;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Register failed";
+        state.status = null;
       });
   },
 });
