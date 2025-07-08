@@ -6,7 +6,10 @@ import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { Eye, EyeOff, Mail, Lock, User, ArrowLeft } from "lucide-react"
 import { gsap } from "gsap"
-
+import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch"
+import { registerUser } from "../redux/actions/RegisterAction"
+import { useRouter } from "next/navigation"
+import { ClipLoader } from "react-spinners"
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -16,7 +19,29 @@ export default function SignUpPage() {
     password: "",
     confirmPassword: "",
   })
+  const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null)
+  const dispatch = useAppDispatch();
+  const { loading, error } = useAppSelector((state: any) => state.login);
+  const [passwordError, setPasswordError] = useState<boolean>(false);
+  //useAppSelector sẽ đọc dữ liệu state bộ nhớ của Redux, useSelector là 1 redux hook
+  const handleRegister = (username: string, email: string, password: string) => {
+    dispatch(registerUser({ username, email, password }));
+    if (!error) {
+      router.push("/signin")
+    } else {
+      console.log("error", error);
+    }
+  };
+  useEffect(() => {
+    if (formData.password && formData.confirmPassword) {
+      if (formData.password !== formData.confirmPassword) {
+        setPasswordError(true);
+      } else {
+        setPasswordError(false);
+      }
+    }
+  }, [formData.password, formData.confirmPassword]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -42,8 +67,7 @@ export default function SignUpPage() {
       alert("Passwords do not match")
       return
     }
-    // Handle sign up logic here
-    console.log("Sign up:", formData)
+    handleRegister(formData.username, formData.email, formData.password)
   }
 
   return (
@@ -130,7 +154,7 @@ export default function SignUpPage() {
             </div>
 
             <div className="signup-field">
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="confirmPassword" className={`block text-sm font-medium ${passwordError ? "text-red-400" : "text-gray-300"} mb-2`}>
                 Confirm Password
               </label>
               <div className="relative">
@@ -140,14 +164,14 @@ export default function SignUpPage() {
                   id="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                  className="w-full bg-gray-800/50 border border-gray-700 rounded-xl px-12 py-3 pr-12 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors"
+                  className={`w-full bg-gray-800/50 border ${passwordError ? "border-red-700" : "border-gray-700"} rounded-xl px-12 py-3 pr-12 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors`}
                   placeholder="Confirm your password"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                  className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${passwordError ? "text-red-400" : "text-gray-400"} hover:text-white transition-colors `}
                 >
                   {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -176,9 +200,15 @@ export default function SignUpPage() {
 
             <button
               type="submit"
-              className="signup-field w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105"
+              className="signin-field w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105"
+              disabled={loading || passwordError}
             >
-              Create Account
+              {loading ? (
+                <ClipLoader color="#a78bfa" size={16} />
+              )
+                : (
+                  "Create account"
+                )}
             </button>
           </form>
 

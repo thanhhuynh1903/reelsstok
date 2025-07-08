@@ -6,14 +6,29 @@ import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { Eye, EyeOff, Mail, Lock, ArrowLeft } from "lucide-react"
 import { gsap } from "gsap"
-
+import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch"
+import { loginUser } from "../redux/actions/loginSlice"
+import { ClipLoader } from "react-spinners"
+import { useRouter } from "next/navigation"
 export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   })
+  const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null)
+  const dispatch = useAppDispatch();
+  const { loading, error, status } = useAppSelector((state: any) => state.login);
+  //useAppSelector sẽ đọc dữ liệu state bộ nhớ của Redux, useSelector là 1 redux hook
+  const handleLogin = (email: string, password: string) => {
+    dispatch(loginUser({ email, password }));
+  };
+useEffect(() => {
+  if (!loading && !error && status === 200) {
+    router.push("/video");
+  }
+}, [loading, error, status, router]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -35,8 +50,7 @@ export default function SignInPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle sign in logic here
-    console.log("Sign in:", formData)
+    handleLogin(formData.email, formData.password)
   }
 
   return (
@@ -116,12 +130,18 @@ export default function SignInPage() {
                 Forgot password?
               </Link>
             </div>
-
             <button
               type="submit"
               className="signin-field w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105"
+              disabled={loading}
             >
-              Sign In
+
+              {loading ? (
+                <ClipLoader color="#a78bfa" size={16} />
+              )
+                : (
+                  "Sign In"
+                )}
             </button>
           </form>
 

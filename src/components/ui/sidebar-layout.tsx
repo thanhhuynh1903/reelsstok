@@ -27,7 +27,7 @@ export function SidebarLayout({ children }: SidebarLayoutProps) {
     return () => window.removeEventListener("resize", checkMobile)
   }, [])
 
-  return currentUrl !== "/" && currentUrl !== "/signin" && currentUrl !== "/signout" ? (
+  return currentUrl !== "/" && currentUrl !== "/signin" && currentUrl !== "/signup" ? (
     <div className="min-h-screen bg-black text-white">
       <ModernSidebar isCollapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
 

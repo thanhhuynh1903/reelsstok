@@ -23,6 +23,7 @@ import {
 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { usePathname } from "next/navigation"
+import useAuth from "@/hooks/useAuth"
 import './styles.css'
 interface SidebarProps {
     isCollapsed?: boolean
@@ -54,6 +55,7 @@ export function Sidebar({ isCollapsed = false, onToggle, className = "" }: Sideb
     const [searchQuery, setSearchQuery] = useState("")
     const [showUserMenu, setShowUserMenu] = useState(false)
     const router = useRouter()
+    const auth = useAuth;
     const pathname = usePathname()
     const sidebarRef = useRef<HTMLDivElement>(null)
     const contentRef = useRef<HTMLDivElement>(null)
@@ -166,6 +168,7 @@ export function Sidebar({ isCollapsed = false, onToggle, className = "" }: Sideb
 
     const handleSignOut = () => {
     handleNavigate("/signin")();
+    auth.logout();
     router.refresh();
     }
 
