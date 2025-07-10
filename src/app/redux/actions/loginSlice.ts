@@ -1,8 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { login } from "@/ServerRequest";
+import useAuth from "@/hooks/useAuth";
 interface LoginResponse {
   status: number;
+  data: {
+    token?: string;
+  };
 }
+
 interface LoginState {
   email: string;
   password: string;
@@ -24,24 +29,28 @@ export const loginUser = createAsyncThunk<
   { email: string; password: string; status: number }, // Return type
   { email: string; password: string }, // Argument type
   { rejectValue: string }
->(
-  "login/loginUser",
-  async (credentials, { rejectWithValue }) => {
-    try {
-      const response = await login(credentials.email, credentials.password) as LoginResponse;
-      if (response.status === 200) {
-        return { ...credentials, status: response?.status };
-      } else {
-        return rejectWithValue("Login failed");
-      }
-    } catch (err: unknown) {
-      if (typeof err === "object" && err !== null && "message" in err) {
-        return rejectWithValue((err as { message?: string }).message || "Login failed");
-      }
+>("login/loginUser", async (credentials, { rejectWithValue }) => {
+  const auth = useAuth();
+  try {
+    const response = (await login(
+      credentials.email,
+      credentials.password
+    )) as LoginResponse;
+    if (response.status === 200) {
+      auth.setUserToken(response.data);
+      return { ...credentials, status: response?.status };
+    } else {
       return rejectWithValue("Login failed");
     }
+  } catch (err: unknown) {
+    if (typeof err === "object" && err !== null && "message" in err) {
+      return rejectWithValue(
+        (err as { message?: string }).message || "Login failed"
+      );
+    }
+    return rejectWithValue("Login failed");
   }
-);
+});
 
 const loginSlice = createSlice({
   name: "login",

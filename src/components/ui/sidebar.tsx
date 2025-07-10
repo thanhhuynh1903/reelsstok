@@ -54,8 +54,10 @@ export function Sidebar({ isCollapsed = false, onToggle, className = "" }: Sideb
     const [expandedGroups, setExpandedGroups] = useState<string[]>(["main"])
     const [searchQuery, setSearchQuery] = useState("")
     const [showUserMenu, setShowUserMenu] = useState(false)
-    const router = useRouter()
-    const auth = useAuth;
+    const router = useRouter();
+    const auth = useAuth();
+    const token = auth.getToken();
+
     const pathname = usePathname()
     const sidebarRef = useRef<HTMLDivElement>(null)
     const contentRef = useRef<HTMLDivElement>(null)
@@ -73,14 +75,14 @@ export function Sidebar({ isCollapsed = false, onToggle, className = "" }: Sideb
         followers: "12.5K",
         following: "892",
     }
- 
+
     const menuItems: { [key: string]: MenuItem[] } = {
         main: [
             {
                 id: "home",
                 label: "Home",
                 icon: Home,
-                href: "/video",
+                href: "/home",
             },
             {
                 id: "explore",
@@ -167,9 +169,14 @@ export function Sidebar({ isCollapsed = false, onToggle, className = "" }: Sideb
     }
 
     const handleSignOut = () => {
-    handleNavigate("/signin")();
-    auth.logout();
-    router.refresh();
+        handleNavigate("/signin")();
+        auth.logout();
+        router.refresh();
+    }
+
+    const handleSignIn = () => {
+        handleNavigate("/signin")();
+        router.refresh();
     }
 
     useEffect(() => {
@@ -358,65 +365,73 @@ export function Sidebar({ isCollapsed = false, onToggle, className = "" }: Sideb
                 </div>
 
                 {/* User Profile */}
-                <div className="border-t border-gray-800/50 p-4">
-                    <div
-                        className={`
+                {token ?
+                    <div className="border-t border-gray-800/50 p-4">
+                        <div
+                            className={`
             flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-800/50 transition-colors cursor-pointer
             ${collapsed ? "justify-center" : ""}
           `}
-                        onClick={() => setShowUserMenu(!showUserMenu)}
-                    >
-                        <div className="relative">
-                            <img
-                                src={userProfile.avatar || "/placeholder.svg"}
-                                alt={userProfile.name}
-                                className="w-10 h-10 rounded-full border-2 border-purple-500/30"
-                            />
-                            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-gray-950"></div>
+                            onClick={() => setShowUserMenu(!showUserMenu)}
+                        >
+                            <div className="relative">
+                                <img
+                                    src={userProfile.avatar || "/placeholder.svg"}
+                                    alt={userProfile.name}
+                                    className="w-10 h-10 rounded-full border-2 border-purple-500/30"
+                                />
+                                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-gray-950"></div>
+                            </div>
+
+                            {!collapsed && (
+                                <div className="sidebar-label flex-1">
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <p className="font-medium text-white text-sm">{userProfile.name}</p>
+                                            <p className="text-xs text-gray-400">{userProfile.username}</p>
+                                        </div>
+                                        <ChevronDown
+                                            className={`w-4 h-4 text-gray-400 transition-transform ${showUserMenu ? "rotate-180" : ""}`}
+                                        />
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
-                        {!collapsed && (
-                            <div className="sidebar-label flex-1">
-                                <div className="flex items-center justify-between">
+                        {/* User Menu Dropdown */}
+                        {showUserMenu && !collapsed && (
+                            <div className="mt-2 bg-gray-900/50 rounded-xl p-2 border border-gray-800/50">
+                                <div className="flex justify-between text-center py-2">
                                     <div>
-                                        <p className="font-medium text-white text-sm">{userProfile.name}</p>
-                                        <p className="text-xs text-gray-400">{userProfile.username}</p>
+                                        <p className="text-sm font-medium text-white">{userProfile.followers}</p>
+                                        <p className="text-xs text-gray-400">Followers</p>
                                     </div>
-                                    <ChevronDown
-                                        className={`w-4 h-4 text-gray-400 transition-transform ${showUserMenu ? "rotate-180" : ""}`}
-                                    />
+                                    <div>
+                                        <p className="text-sm font-medium text-white">{userProfile.following}</p>
+                                        <p className="text-xs text-gray-400">Following</p>
+                                    </div>
+                                </div>
+                                <div className="border-t border-gray-800/50 pt-2 mt-2">
+                                    <button onClick={handleNavigate("/profile")} className="w-full text-left px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-colors">
+                                        View Profile
+                                    </button>
+                                    <button className="w-full text-left px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-colors">
+                                        Switch Account
+                                    </button>
+                                    <button onClick={handleSignOut} className="w-full text-left px-3 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors">
+                                        Sign Out
+                                    </button>
                                 </div>
                             </div>
                         )}
                     </div>
-
-                    {/* User Menu Dropdown */}
-                    {showUserMenu && !collapsed && (
-                        <div className="mt-2 bg-gray-900/50 rounded-xl p-2 border border-gray-800/50">
-                            <div className="flex justify-between text-center py-2">
-                                <div>
-                                    <p className="text-sm font-medium text-white">{userProfile.followers}</p>
-                                    <p className="text-xs text-gray-400">Followers</p>
-                                </div>
-                                <div>
-                                    <p className="text-sm font-medium text-white">{userProfile.following}</p>
-                                    <p className="text-xs text-gray-400">Following</p>
-                                </div>
-                            </div>
-                            <div className="border-t border-gray-800/50 pt-2 mt-2">
-                                <button onClick={handleNavigate("/profile")} className="w-full text-left px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-colors">
-                                    View Profile
-                                </button>
-                                <button className="w-full text-left px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-colors">
-                                    Switch Account
-                                </button>
-                                <button onClick={handleSignOut} className="w-full text-left px-3 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors">
-                                    Sign Out
-                                </button>
-                            </div>
-                        </div>
-                    )}
-                </div>
+                    :
+                    <div className="border-t border-gray-800/50 p-4">
+                        <button onClick={handleSignIn} className="w-full text-left px-3 py-2 text-sm text-green-400 hover:text-green-300 hover:bg-green-500/10 rounded-lg transition-colors">
+                            Sign In
+                        </button>
+                    </div>
+                }
             </div>
         </div>
     )

@@ -10,25 +10,36 @@ import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch"
 import { loginUser } from "../redux/actions/loginSlice"
 import { ClipLoader } from "react-spinners"
 import { useRouter } from "next/navigation"
+import useToast from "@/hooks/useToast";
+
 export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   })
+  const { showSuccess, showError } = useToast();
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null)
   const dispatch = useAppDispatch();
   const { loading, error, status } = useAppSelector((state) => state.login);
   //useAppSelector sẽ đọc dữ liệu state bộ nhớ của Redux, useSelector là 1 redux hook
   const handleLogin = (email: string, password: string) => {
-    dispatch(loginUser({ email, password }));
+    dispatch(loginUser({ email, password })).then((result) => {
+      if (result.meta.requestStatus === "fulfilled") {
+        showSuccess("Login successfully");
+      } else {
+        showError("Login failed");
+      }
+    });
   };
-useEffect(() => {
-  if (!loading && !error && status === 200) {
-    router.push("/video");
-  }
-}, [loading, error, status, router]);
+
+
+  useEffect(() => {
+    if (!loading && !error && status === 200) {
+      router.push("/video");
+    }
+  }, [loading, error, status, router]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
