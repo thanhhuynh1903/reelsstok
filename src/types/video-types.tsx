@@ -41,7 +41,7 @@ export interface TikTokVideo {
   collectCount: number;
   commentCount: number;
   mentions: string[];
-  detailedMentions: any[]; // You can define a more specific type if needed
+  detailedMentions: string[];
   hashtags: {
     name: string;
   }[];

@@ -25,9 +25,7 @@ export function useQueryNoToken({ queryKey, endpoint, enabled = true }: ApiQuery
   return useQuery<AxiosError>({
     queryKey,
     queryFn: async () => {
-      const response = await axios.get(endpoint);
-      console.log("response", response);
-      
+      const response = await axios.get(endpoint);      
       return response.data;
     },
     enabled: enabled , // Only fetch if authenticated

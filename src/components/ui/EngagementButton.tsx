@@ -1,11 +1,12 @@
 import React from 'react'
 import { Heart, MessageCircle, Bookmark, Share, MessageSquareHeart } from 'lucide-react'
 import type { EngagementButtonProps } from '@/types/engagement-types'
-export default function EngagementButton({ isLiked = false, isLive = false, isSaved = false, handleLike, handleSave }: EngagementButtonProps) {
+import ValidationCountButton from '@/utils/ValidationCountButton'
+export default function EngagementButton({ data, isLiked = false, isLive = false, isSaved = false, handleLike, handleSave }: EngagementButtonProps) {
     const objectLivebutton = [{
         name: "Like",
         icon: <Heart className="w-6 h-6" />,
-        count: "3.2K",
+        count: data.playCount,
         isActive: isLiked,
         onClick: handleLike,
         activeClass: <Heart className="w-6 h-6" fill="red" stroke="red" />,
@@ -13,7 +14,7 @@ export default function EngagementButton({ isLiked = false, isLive = false, isSa
     {
         name: "Comment",
         icon: <MessageSquareHeart className="w-6 h-6" />,
-        count: "847",
+        count: data.commentCount,
         isActive: false,
         onClick: () => { },
         activeClass: <MessageCircle className="w-6 h-6" />,
@@ -22,14 +23,14 @@ export default function EngagementButton({ isLiked = false, isLive = false, isSa
         name: "Share",
         icon: <Share className="w-6 h-6" />,
         count: "234",
-        isActive: false,
+        isActive: data.shareCount,
         onClick: () => { },
         activeClass: <Share className="w-6 h-6" />,
     }]
     const objectVideobutton = [{
         name: "Like",
         icon: <Heart className="w-6 h-6" />,
-        count: "3.2K",
+        count: ValidationCountButton({ num: data?.playCount }),
         isActive: isLiked,
         onClick: handleLike,
         activeClass: <Heart className="w-6 h-6" fill="red" stroke="red" />,
@@ -38,21 +39,21 @@ export default function EngagementButton({ isLiked = false, isLive = false, isSa
         name: "Comment",
         icon: <MessageCircle className="w-6 h-6" />,
         count: "847",
-        isActive: false,
+        isActive: ValidationCountButton({ num: data?.commentCount }),
         onClick: () => { },
         activeClass: <MessageCircle className="w-6 h-6" />,
     },
     {
         name: "Save",
         icon: <Bookmark className="w-6 h-6" />,
-        count: "1.1K",
+        count: ValidationCountButton({ num: data?.collectCount }),
         isActive: isSaved,
         onClick: handleSave,
         activeClass: <Bookmark className="w-6 h-6" fill="yellow" stroke="yellow" />,
     }, {
         name: "Share",
         icon: <Share className="w-6 h-6" />,
-        count: "234",
+        count: ValidationCountButton({ num: data?.shareCount }),
         isActive: false,
         onClick: () => { },
         activeClass: <Share className="w-6 h-6" />,

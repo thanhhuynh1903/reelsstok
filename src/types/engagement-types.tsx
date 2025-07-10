@@ -1,11 +1,13 @@
+import type { TikTokVideo } from "./video-types"
 export interface EngagementButtonProps {
-  data: any,
+  data: TikTokVideo,
   isLiked?: boolean
   isSaved?: boolean
   isLive?: boolean
   handleLike: () => void
   handleSave: () => void
 }
+
 export interface EngagementButton {
   name: string
   icon: React.ReactNode
