@@ -2,14 +2,14 @@ import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import axios from 'axios';
 import apiClient from '@/API/axios';
-interface ApiQueryOptions<T> {
+interface ApiQueryOptions{
   queryKey: string[];
   endpoint: string;
   enabled?: boolean;
 }
 
-export function useApiQuery<T>({ queryKey, endpoint, enabled = true }: ApiQueryOptions<T>) {
-  return useQuery<T, AxiosError>({
+export function useApiQuery({ queryKey, endpoint, enabled = true }: ApiQueryOptions) {
+  return useQuery<AxiosError>({
     queryKey,
     queryFn: async () => {
       const response = await apiClient.get(endpoint);
@@ -21,8 +21,8 @@ export function useApiQuery<T>({ queryKey, endpoint, enabled = true }: ApiQueryO
   });
 }
 
-export function useQueryNoToken<T>({ queryKey, endpoint, enabled = true }: ApiQueryOptions<T>) {
-  return useQuery<T, AxiosError>({
+export function useQueryNoToken({ queryKey, endpoint, enabled = true }: ApiQueryOptions) {
+  return useQuery<AxiosError>({
     queryKey,
     queryFn: async () => {
       const response = await axios.get(endpoint);

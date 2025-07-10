@@ -14,7 +14,7 @@ import VideoSection from "./ui/video-section"
 import VideoOverLayout from "./ui/VideoOverLayout"
 import EngagementButton from "./ui/EngagementButton"
 import CommentLayout from "./ui/CommentLayout"
-import Scrollreel from "./scrollreel"
+
 import '../components/ui/styles.css'
 import type { GamingVideoPlayerProps, Comment } from "@/types/comment-types"
 import { useQueryNoToken } from "@/lib/Query/QueryClient"
@@ -199,12 +199,13 @@ export function LiveLayout({ isLive }: GamingVideoPlayerProps) {
             <div className="my-20">
               <div ref={videoRef} className="relative h-[700px] w-[750px] snap-center bg-gray-900 rounded-lg overflow-hidden">
                 {/* Video Background */}
-                <VideoSection video={video} />
+                <VideoSection video={video} setIsMuted={setIsMuted} />
                 <VideoOverLayout
                   data={video}
                   isMuted={isMuted}
                   isLive={false}
                   isPlaying={isPlaying && currentVideoIndex === index}
+                  setIsPlaying={setIsPlaying}
                 />
 
                 {/* Engagement Buttons */}

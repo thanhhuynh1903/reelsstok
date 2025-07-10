@@ -9,12 +9,14 @@ interface VideoOverLayoutProps {
     isMuted?: boolean;
     isLive?: boolean;
     isPlaying?: boolean;
+    setIsPlaying: (isPlaying: boolean) => void
 }
 export default function VideoOverLayout({
     data,
     isMuted = true,
     isLive = true,
     isPlaying = false,
+    setIsPlaying
 }: VideoOverLayoutProps) {
     const [isOpenDescription, setIsOpenDescription] = useState<boolean>(false)
     const descRef = useRef<HTMLDivElement>(null)
@@ -67,7 +69,7 @@ export default function VideoOverLayout({
 
             {/* Center Play/Pause Button */}
             <div className="absolute inset-0 flex items-center justify-center">
-                <button
+                <button onClick={() => setIsPlaying(!isPlaying)}
                     className="p-4 bg-black/50 backdrop-blur-sm rounded-full hover:bg-black/70 transition-all transform hover:scale-110"
                 >
                     {isPlaying ? <Pause className="w-8 h-8" /> : <Play className="w-8 h-8" />}
