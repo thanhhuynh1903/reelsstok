@@ -82,7 +82,7 @@ export function LiveLayout({ isLive }: GamingVideoPlayerProps) {
   ])
   const videoRef = useRef<HTMLDivElement>(null)
   const commentsRef = useRef<HTMLDivElement>(null)
-  const { data } = useQueryNoToken({ queryKey: ["gaming"], endpoint: "https://api.apify.com/v2/datasets/SYmFATN3FbLHnLQwQ/items?token=apify_api_gGqvvpCnxgyeXSNWustLliHiKlYU6o2qdoLQ", enabled: true })
+  const { data } = useQueryNoToken({ queryKey: ["gaming"], endpoint:`${process.env.NEXT_PUBLIC_API_URL_APIFY}`, enabled: true })
   const videos = Array.isArray(data) ? (data as TikTokVideo[]) : [];
   const scrollRef = useRef<HTMLDivElement>(null);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
