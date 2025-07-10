@@ -3,19 +3,8 @@ import { useState, useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { VolumeX, Volume2, MoreHorizontal, X, Play, Pause, UserPlus, ArrowDownUp } from 'lucide-react'
 import Link from 'next/link'
-import type { TikTokVideo } from '@/types/video-types'
-interface VideoOverLayoutProps {
-    data: TikTokVideo | null;
-    isMuted?: boolean;
-    isLive?: boolean;
-    isPlaying?: boolean;
-}
-export default function VideoOverLayout({
-    data,
-    isMuted = true,
-    isLive = true,
-    isPlaying = false,
-}: VideoOverLayoutProps) {
+
+export default function VideoOverLayout({ isMuted = true, isLive = true, channelName = "Channel Name", videoTitle = "Video Title", viewCount = 1234, isPlaying = false }) {
     const [isOpenDescription, setIsOpenDescription] = useState<boolean>(false)
     const descRef = useRef<HTMLDivElement>(null)
 
@@ -29,11 +18,7 @@ export default function VideoOverLayout({
             )
         }
     }, [isOpenDescription])
-    const channelName = data?.authorMeta.nickName || 'Channel Name';
-    const videoTitle = data?.text || 'Video Title';
-    const viewCount = data?.playCount || 1234;
-    const imageURL = data?.authorMeta.originalAvatarUrl
-    const hastag = data?.hashtags
+
     return (
         <div className="absolute inset-0 bg-black/10">
             {/* Top Bar */}
@@ -86,7 +71,7 @@ export default function VideoOverLayout({
                         <div className='flex flex-row items-start space-x-4'>
                             <Link href="/channels/buildmaster" className="relative">
                                 <img
-                                    src={imageURL}
+                                    src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFdupUSSbQ3Zx2H3xcvQfH1UfcdYLjCL2a7Q&s"}
                                     className="w-16 h-16 object-cover md:w-18 md:h-18 rounded-full border-4 border-black bg-gray-900"
                                 />
                             </Link>
@@ -120,9 +105,9 @@ export default function VideoOverLayout({
                                     </div>
                                 )}
                                 <div className="flex flex-wrap gap-2 mt-2">
-                                    {hastag && hastag.map((tag) => (
-                                        <span className="bg-purple-600/30 text-purple-300 px-2 py-1 rounded-full text-xs">
-                                            #{tag.name}
+                                    {["#minecraft", "#building", "#tutorial", "#gaming", "#live"].map((tag) => (
+                                        <span key={tag} className="bg-purple-600/30 text-purple-300 px-2 py-1 rounded-full text-xs">
+                                            {tag}
                                         </span>
                                     ))}
                                 </div>

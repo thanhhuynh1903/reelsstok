@@ -1,4 +1,5 @@
 import apiClient from "@/API/axios";
+import useAuth from "@/hooks/useAuth";
 
 export const login = async (email: string, password: string) => {
   return await apiClient
@@ -8,6 +9,8 @@ export const login = async (email: string, password: string) => {
     })
     .then((repsonse) => {
       try {
+        console.log("response", repsonse);
+        useAuth.setUserToken(repsonse.data.token);
         return repsonse;
       } catch (error) {
         console.log("error", error);

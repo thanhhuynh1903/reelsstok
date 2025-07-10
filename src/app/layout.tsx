@@ -3,8 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SidebarLayout } from "@/components/ui/sidebar-layout";
 import ReduxProvider from "./redux/ReduxProvider";
-import { ToastContainer } from "react-toastify";
-import ReactQueryProvider from "@/lib/QueryProvider";
+
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -30,25 +30,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white font-sans`}
       >
-        <ReactQueryProvider>
-          <ReduxProvider>
-            <SidebarLayout>
-              {children}
-            </SidebarLayout>
-          </ReduxProvider>
-        </ReactQueryProvider>
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick={false}
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
+        <ReduxProvider>
+          <SidebarLayout>
+            {children}
+          </SidebarLayout>
+        </ReduxProvider>
       </body>
     </html>
   );

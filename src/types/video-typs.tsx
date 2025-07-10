@@ -1,4 +1,3 @@
-import type { TikTokVideo } from "./video-types"
 interface Video {
   id: number
   title: string
@@ -18,5 +17,4 @@ export interface GamingVideoPlayerProps {
   channelName?: string
   viewCount?: string
   isLive?: boolean
-  data?: TikTokVideo[];
 }
