@@ -57,10 +57,9 @@ export default function EngagementButton({ isLiked = false, isLive = false, isSa
         onClick: () => { },
         activeClass: <Share className="w-6 h-6" />,
     }]
-    console.log("isLive", isLive);
 
     return (
-        <div className="absolute right-2 top-[45%] transform -translate-y-1/2 flex flex-col space-y-4">
+        <div className="absolute right-5 top-[45%] transform -translate-y-1/2 flex flex-col space-y-4">
             {isLive ?
                 objectLivebutton.map((button, index) => (
                     <div className='flex flex-col items-center' key={index}>

@@ -17,11 +17,10 @@ import CommentLayout from "./ui/CommentLayout"
 import Scrollreel from "./scrollreel"
 import '../components/ui/styles.css'
 import type { GamingVideoPlayerProps, Comment } from "@/types/comment-types"
-
-export function LiveLayout({ isLive}: GamingVideoPlayerProps) {
+import { useQueryNoToken } from "@/lib/Query/QueryClient"
+import type { TikTokVideo } from "@/types/video-types"
+export function LiveLayout({ isLive }: GamingVideoPlayerProps) {
   // const [isMuted, setIsMuted] = useState<boolean>(false)
-  const [isLiked, setIsLiked] = useState<boolean>(false)
-  const [isSaved, setIsSaved] = useState<boolean>(false)
   const [showComments, setShowComments] = useState<boolean>(true)
   const [newComment, setNewComment] = useState<string>("")
   const [comments, setComments] = useState<Comment[]>([
@@ -81,9 +80,16 @@ export function LiveLayout({ isLive}: GamingVideoPlayerProps) {
       likes: 123,
     },
   ])
-
   const videoRef = useRef<HTMLDivElement>(null)
   const commentsRef = useRef<HTMLDivElement>(null)
+  const { data } = useQueryNoToken({ queryKey: ["gaming"], endpoint: "https://api.apify.com/v2/datasets/SYmFATN3FbLHnLQwQ/items?token=apify_api_gGqvvpCnxgyeXSNWustLliHiKlYU6o2qdoLQ", enabled: true })
+  const videos = Array.isArray(data) ? (data as TikTokVideo[]) : [];
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [isLiked, setIsLiked] = useState<boolean[]>(videos.map(() => false));
+  const [isSaved, setIsSaved] = useState<boolean[]>(videos.map(() => false));
+  const [isMuted, setIsMuted] = useState<boolean>(true);
+  const [isPlaying, setIsPlaying] = useState<boolean>(true);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -111,17 +117,53 @@ export function LiveLayout({ isLive}: GamingVideoPlayerProps) {
 
     return () => ctx.revert()
   }, [])
+  useEffect(() => {
+    if (scrollRef.current) {
+      gsap.to(scrollRef.current, {
+        scrollTo: { y: currentVideoIndex * window.innerHeight },
+        duration: 0.5,
+        ease: 'power2.out',
+      });
+    }
+  }, [currentVideoIndex]);
+  useEffect(() => {
+    if (scrollRef.current) {
+      const handleScroll = () => {
+        const scrollTop = scrollRef.current!.scrollTop;
+        const videoHeight = window.innerHeight;
+        const newIndex = Math.round(scrollTop / videoHeight);
+        setCurrentVideoIndex(newIndex);
+      };
 
-  const handleLike = () => {
-    setIsLiked(!isLiked)
-    gsap.fromTo(".like-btn", { scale: 1 }, { scale: 1.5, duration: 0.4, yoyo: true, repeat: 1 })
-  }
+      scrollRef.current.addEventListener('scroll', handleScroll);
+      return () => scrollRef.current?.removeEventListener('scroll', handleScroll);
+    }
+  }, []);
+  const handleLike = (index: number) => {
+    setIsLiked((prev) => {
+      const newLikes = [...prev];
+      newLikes[index] = !newLikes[index];
+      return newLikes;
+    });
+    gsap.fromTo(
+      `.like-btn-${index}`,
+      { scale: 1 },
+      { scale: 1.5, duration: 0.4, yoyo: true, repeat: 1 }
+    );
+  };
 
-  const handleSave = () => {
-    setIsSaved(!isSaved)
-    gsap.fromTo(".save-btn", { scale: 1 }, { scale: 1.4, duration: 0.4, yoyo: true, repeat: 1 })
-  }
-
+  const handleSave = (index: number) => {
+    setIsSaved((prev) => {
+      const newSaves = [...prev];
+      newSaves[index] = !newSaves[index];
+      return newSaves;
+    });
+    gsap.fromTo(
+      `.save-btn-${index}`,
+      { scale: 1 },
+      { scale: 1.4, duration: 0.4, yoyo: true, repeat: 1 }
+    );
+  };
   const handleSendComment = () => {
     if (newComment.trim()) {
       const comment: Comment = {
@@ -148,19 +190,38 @@ export function LiveLayout({ isLive}: GamingVideoPlayerProps) {
   return (
     <div className="flex h-screen bg-black text-white ">
       {/* Main Video Area */}
-      <div className="flex-1 relative pl-8 py-8">
-        <div ref={videoRef} className="relative h-full bg-gray-900 rounded-lg overflow-hidden">
-          {/* Video Background */}
-          <VideoSection />
-          <VideoOverLayout isLive={isLive}/>
+      <div className="flex-1 relative pl-8">
+        <div
+          ref={scrollRef}
+          className="flex-1 h-screen overflow-y-scroll snap-y snap-mandatory hide-scrollbar"
+        >
+          {videos.map((video, index) => (
+            <div className="my-20">
+              <div ref={videoRef} className="relative h-[700px] w-[750px] snap-center bg-gray-900 rounded-lg overflow-hidden">
+                {/* Video Background */}
+                <VideoSection video={video} />
+                <VideoOverLayout
+                  data={video}
+                  isMuted={isMuted}
+                  isLive={false}
+                  isPlaying={isPlaying && currentVideoIndex === index}
+                />
+
+                {/* Engagement Buttons */}
+
+              </div>
+              < EngagementButton
+                data={video}
+                handleLike={() => handleLike(index)}
+                isLiked={isLiked[index]}
+                handleSave={() => handleSave(index)}
+                isSaved={isSaved[index]}
+                isLive={false}
+              />
+            </div>
+          ))}
         </div>
-
-        {/* Engagement Buttons */}
-        <EngagementButton handleLike={handleLike} isLiked={isLiked} handleSave={handleSave} isSaved={isSaved} isLive={isLive} />
       </div>
-
-      <Scrollreel />
-
       {/* Comments Panel */}
       {showComments && (
         <div className="w-96 bg-gray-950/95 backdrop-blur-xl border-l border-gray-800 flex flex-col">

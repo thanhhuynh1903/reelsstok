@@ -1,4 +1,5 @@
 export interface EngagementButtonProps {
+  data: any,
   isLiked?: boolean
   isSaved?: boolean
   isLive?: boolean

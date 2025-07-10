@@ -45,7 +45,7 @@ export default function VideoCard({ video }: VideoCardProps) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <Link href={`/video`} className="block h-full">
+      <Link href={`/home`} className="block h-full">
       {/* Thumbnail */}
       <div className="relative aspect-[3/4]">
         <img src={video.thumbnail || "/placeholder.svg"} alt={video.title} className="w-full h-full object-cover" />
