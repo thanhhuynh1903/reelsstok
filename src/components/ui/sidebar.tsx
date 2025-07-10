@@ -56,8 +56,8 @@ export function Sidebar({ isCollapsed = false, onToggle, className = "" }: Sideb
     const [showUserMenu, setShowUserMenu] = useState(false)
     const router = useRouter();
     const auth = useAuth();
-    const token = auth.getToken();
-
+    const token = auth?.getToken();
+    
     const pathname = usePathname()
     const sidebarRef = useRef<HTMLDivElement>(null)
     const contentRef = useRef<HTMLDivElement>(null)
@@ -365,7 +365,7 @@ export function Sidebar({ isCollapsed = false, onToggle, className = "" }: Sideb
                 </div>
 
                 {/* User Profile */}
-                {token ?
+                {token !== null ?
                     <div className="border-t border-gray-800/50 p-4">
                         <div
                             className={`

@@ -31,14 +31,13 @@ export function LiveLayout({ isLive = false }: GamingVideoPlayerProps) {
   const [isSaved, setIsSaved] = useState<boolean[]>([]);
   const [isMuted, setIsMuted] = useState<boolean>(true);
   const [isPlaying, setIsPlaying] = useState<boolean[]>(videos.map(() => false));
-  console.log('videos', videos);
 
   // Update isLiked, isSaved, and isPlaying when videos change
   useEffect(() => {
     setIsLiked(videos.map(() => false));
     setIsSaved(videos.map(() => false));
     setIsPlaying(videos.map((_, index) => index === currentVideoIndex));
-  }, [videos, currentVideoIndex]);
+  }, []);
 
   // GSAP animations for video and comments
   useEffect(() => {

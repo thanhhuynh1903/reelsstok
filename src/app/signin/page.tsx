@@ -37,7 +37,7 @@ export default function SignInPage() {
 
   useEffect(() => {
     if (!loading && !error && status === 200) {
-      router.push("/video");
+      router.push("/home");
     }
   }, [loading, error, status, router]);
 

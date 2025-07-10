@@ -1,5 +1,5 @@
 export type UserToken = {
-  token?: string;
+  token?: string ;
   user_id?: string;
   email?: string;
   username?: string;
@@ -17,9 +17,9 @@ interface Token {
 }
 const AUTH_KEY = "authToken";
 
-function getUserDetails(): UserToken {
-  if (typeof window === "undefined") return {};
-  return JSON.parse(localStorage.getItem(AUTH_KEY) ?? "{}");
+function getUserDetails(): UserToken | null {
+  if (typeof window === "undefined") return null;
+  return JSON.parse(localStorage.getItem(AUTH_KEY) ?? "null");
 }
 
 export default function useAuth() {

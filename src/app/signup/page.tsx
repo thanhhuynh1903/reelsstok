@@ -10,6 +10,8 @@ import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch"
 import { registerUser } from "../redux/actions/RegisterAction"
 import { useRouter } from "next/navigation"
 import { ClipLoader } from "react-spinners"
+import useToast from "@/hooks/useToast";
+
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -23,13 +25,16 @@ export default function SignUpPage() {
   const containerRef = useRef<HTMLDivElement>(null)
   const dispatch = useAppDispatch();
   const { loading, error } = useAppSelector((state) => state.login);
+  const { showSuccess, showError } = useToast();
   const [passwordError, setPasswordError] = useState<boolean>(false);
   //useAppSelector sẽ đọc dữ liệu state bộ nhớ của Redux, useSelector là 1 redux hook
   const handleRegister = (username: string, email: string, password: string) => {
     dispatch(registerUser({ username, email, password }));
     if (!error) {
       router.push("/signin")
+      showSuccess("Register successfully");
     } else {
+      showError(`Register failed :${error}`);
       console.log("error", error);
     }
   };
