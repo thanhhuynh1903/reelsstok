@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import type { TikTokVideo } from '@/types/video-types';
 
 interface VideoSectionProps {
@@ -13,8 +13,8 @@ interface VideoSectionProps {
 
 export default function VideoSection({ video, isMuted, isPlaying }: VideoSectionProps) {
   const videoElementRef = useRef<HTMLVideoElement>(null);
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
-  const [loadingProgress, setLoadingProgress] = useState(0);
+  // const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  // const [loadingProgress, setLoadingProgress] = useState(0);
 
   useEffect(() => {
     if (videoElementRef.current) {
@@ -28,30 +28,30 @@ export default function VideoSection({ video, isMuted, isPlaying }: VideoSection
     }
   }, [isPlaying]);
 
-  // Reset loading state when video changes
-  useEffect(() => {
-    setIsVideoLoaded(false);
-    setLoadingProgress(0);
-  }, [video]);
+  // // Reset loading state when video changes
+  // useEffect(() => {
+  //   setIsVideoLoaded(false);
+  //   setLoadingProgress(0);
+  // }, [video]);
 
-  const handleLoadedData = () => {
-    setIsVideoLoaded(true);
-  };
+  // const handleLoadedData = () => {
+  //   setIsVideoLoaded(true);
+  // };
 
-  const handleProgress = () => {
-    if (videoElementRef.current) {
-      const buffered = videoElementRef.current.buffered;
-      if (buffered.length > 0) {
-        const progress = (buffered.end(buffered.length - 1) / videoElementRef.current.duration * 100);
-        setLoadingProgress(progress);
-      }
-    }
-  };
+  // const handleProgress = () => {
+  //   if (videoElementRef.current) {
+  //     const buffered = videoElementRef.current.buffered;
+  //     if (buffered.length > 0) {
+  //       const progress = (buffered.end(buffered.length - 1) / videoElementRef.current.duration * 100);
+  //       setLoadingProgress(progress);
+  //     }
+  //   }
+  // };
 
   return (
     <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-purple-900/20 to-pink-900/20">
       {/* Loading overlay */}
-      {!isVideoLoaded && (
+      {/* {!isVideoLoaded && (
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black">
           <div className="w-16 h-16 border-4 border-t-transparent border-purple-500 rounded-full animate-spin mb-4" />
           <p className="text-white font-medium">Loading video...</p>
@@ -62,7 +62,7 @@ export default function VideoSection({ video, isMuted, isPlaying }: VideoSection
             />
           </div>
         </div>
-      )}
+      )} */}
 
       <video
         ref={videoElementRef}
@@ -72,10 +72,10 @@ export default function VideoSection({ video, isMuted, isPlaying }: VideoSection
         muted={!isMuted}
         playsInline
         poster={video?.videoMeta?.coverUrl || '/placeholder.svg?height=720&width=1280'}
-        onLoadedData={handleLoadedData}
-        onProgress={handleProgress}
-        onWaiting={() => setIsVideoLoaded(false)}
-        onCanPlay={() => setIsVideoLoaded(true)}
+        // onLoadedData={handleLoadedData}
+        // onProgress={handleProgress}
+        // onWaiting={() => setIsVideoLoaded(false)}
+        // onCanPlay={() => setIsVideoLoaded(true)}
       />
     </div>
   );
