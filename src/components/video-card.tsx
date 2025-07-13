@@ -5,6 +5,8 @@ import { Play, Heart, Share, MessageCircle, MoreVertical } from "lucide-react"
 import { gsap } from "gsap"
 import type { VideoCardProps } from "@/types/video-typs"
 import Link from "next/link"
+import ValidationCountButton from "@/utils/ValidationCountButton"
+import { removeTrailingHashtags } from "@/utils/removeTrailingHashtags"
 export default function VideoCard({ video }: VideoCardProps) {
   const [isHovered, setIsHovered] = useState(false)
   const [isLiked, setIsLiked] = useState(false)
@@ -46,51 +48,56 @@ export default function VideoCard({ video }: VideoCardProps) {
       onMouseLeave={() => setIsHovered(false)}
     >
       <Link href={`/home`} className="block h-full">
-      {/* Thumbnail */}
-      <div className="relative aspect-[3/4]">
-        <img src={video.thumbnail || "/placeholder.svg"} alt={video.title} className="w-full h-full object-cover" />
+        {/* Thumbnail */}
+        <div className="relative aspect-[3/4]">
+          <video
+            className="w-full h-full object-cover"
+            src={video?.videoMeta?.downloadAddr || '/placeholder.mp4'}
+            loop
+            playsInline
+            poster={video?.videoMeta?.coverUrl || '/placeholder.svg?height=720&width=1280'}
+          />
+          {/* Duration badge */}
+          <div className="absolute top-3 right-3 bg-black/70 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-medium">
+            {video.duration}
+          </div>
 
-        {/* Duration badge */}
-        <div className="absolute top-3 right-3 bg-black/70 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-medium">
-          {video.duration}
-        </div>
-
-        {/* Play overlay */}
-        <div ref={overlayRef} className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0">
-          <div className="bg-white/20 backdrop-blur-sm rounded-full p-4">
-            <Play className="w-8 h-8 text-white fill-white" />
+          {/* Play overlay */}
+          <div ref={overlayRef} className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0">
+            <div className="bg-white/20 backdrop-blur-sm rounded-full p-4">
+              <Play className="w-8 h-8 text-white fill-white" />
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Content */}
-      <div className="p-4">
-        <h3 className="font-semibold text-white mb-2 h-[50px]">{video.title}</h3>
-        <p className="text-gray-400 text-sm mb-3">@{video.creator}</p>
+        {/* Content */}
+        <div className="p-4">
+          <h3 className="font-semibold text-white mb-2 h-[50px] overflow-hidden">{removeTrailingHashtags(video.text)}</h3>
+          <p className="text-gray-400 text-sm mb-3">@{video?.authorMeta?.nickName}</p>
 
-        <div className="flex items-center justify-between text-sm text-gray-400">
-          <span>{video.views} views</span>
-          <div className="flex items-center space-x-3">
-            <button onClick={handleLike} className="flex items-center space-x-1 hover:text-red-400 transition-colors">
-              <Heart className={`like-icon w-4 h-4 ${isLiked ? "fill-red-400 text-red-400" : ""}`} />
-              <span>{video.likes}</span>
-            </button>
-            <button className="hover:text-white transition-colors">
-              <Share className="w-4 h-4" />
-            </button>
-            <button className="hover:text-white transition-colors">
-              <MoreVertical className="w-4 h-4" />
-            </button>
+          <div className="flex items-center justify-between text-sm text-gray-400">
+            <span>{ValidationCountButton({ num: video.playCount })} views</span>
+            <div className="flex items-center space-x-3">
+              <button onClick={handleLike} className="flex items-center space-x-1 hover:text-red-400 transition-colors">
+                <Heart className={`like-icon w-4 h-4 ${isLiked ? "fill-red-400 text-red-400" : ""}`} />
+                <span>{ValidationCountButton({ num: video?.diggCount })}</span>
+              </button>
+              <button className="hover:text-white transition-colors">
+                <Share className="w-4 h-4" />
+              </button>
+              <button className="hover:text-white transition-colors">
+                <MoreVertical className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Hover actions */}
-      <div className="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-        <button className="bg-black/50 backdrop-blur-sm rounded-full p-2 hover:bg-black/70 transition-colors">
-          <MessageCircle className="w-4 h-4 text-white" />
-        </button>
-      </div>
+        {/* Hover actions */}
+        <div className="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          <button className="bg-black/50 backdrop-blur-sm rounded-full p-2 hover:bg-black/70 transition-colors">
+            <MessageCircle className="w-4 h-4 text-white" />
+          </button>
+        </div>
       </Link>
     </div>
   )

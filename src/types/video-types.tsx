@@ -55,4 +55,8 @@ export interface TikTokVideo {
   isSlideshow?: boolean;
   isPinned?: boolean;
   isSponsored?: boolean;
+  
+  category?: string;
+  trending?: boolean;
+  duration?: string | number | undefined;
 }

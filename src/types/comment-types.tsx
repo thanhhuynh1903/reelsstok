@@ -1,3 +1,4 @@
+import type { TikTokVideo } from "./video-types"
 export interface CommentLayoutProps {
   key: string | number
   avatar?: string
@@ -18,6 +19,7 @@ export interface Comment {
 }
 
 export interface GamingVideoPlayerProps {
+  videos: TikTokVideo[]
   videoTitle?: string
   channelName?: string
   viewCount?: string

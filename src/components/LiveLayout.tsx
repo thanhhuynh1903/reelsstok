@@ -9,22 +9,14 @@ import EngagementButton from './ui/EngagementButton';
 import CommentLayout from './ui/CommentLayout';
 import '../components/ui/styles.css';
 import type { GamingVideoPlayerProps, Comment } from '@/types/comment-types';
-import type { TikTokVideo } from '@/types/video-types';
-import { useQueryNoToken } from '@/lib/Query/QueryClient';
 import { sampleComment } from '@/mock/sample';
-export function LiveLayout({ isLive = false }: GamingVideoPlayerProps) {
+export function LiveLayout({videos, isLive = false }: GamingVideoPlayerProps) {
   const [showComments, setShowComments] = useState<boolean>(true);
   const [newComment, setNewComment] = useState<string>('');
   const [comments, setComments] = useState<Comment[]>(sampleComment);
   const videoRef = useRef<HTMLDivElement>(null);
   const commentsRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { data } = useQueryNoToken({
-    queryKey: ['gaming'],
-    endpoint: `${process.env.NEXT_PUBLIC_API_URL_APIFY}`,
-    enabled: true,
-  });
-  const videos = Array.isArray(data) ? (data.filter((video) => video.id) as TikTokVideo[]) : [];
 
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [isLiked, setIsLiked] = useState<boolean[]>([]);

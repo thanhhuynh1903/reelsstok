@@ -21,7 +21,7 @@ export function useApiQuery({ queryKey, endpoint, enabled = true }: ApiQueryOpti
   });
 }
 
-export function useQueryNoToken({ queryKey, endpoint, enabled = true }: ApiQueryOptions) {
+export function UseQueryNoToken({ queryKey, endpoint, enabled = true }: ApiQueryOptions) {
   return useQuery<AxiosError>({
     queryKey,
     queryFn: async () => {

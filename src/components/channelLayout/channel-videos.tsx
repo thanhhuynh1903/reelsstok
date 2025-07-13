@@ -6,19 +6,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 import VideoCard from "@/components/video-card"
 import { Filter, Grid, List, Upload } from "lucide-react"
 import { useRouter } from "next/navigation"
+import type { TikTokVideo } from "@/types/video-types"
+import { UseQueryNoToken } from "@/lib/Query/QueryClient"
 gsap.registerPlugin(ScrollTrigger)
-
-interface Video {
-  id: number
-  title: string
-  creator: string
-  views: string
-  likes: string
-  thumbnail: string
-  duration: string
-  uploadDate: string
-  category: string
-}
 
 interface ChannelVideosProps {
   channelData: {
@@ -27,75 +17,14 @@ interface ChannelVideosProps {
   isOwnChannel: boolean
 }
 
-export function ChannelVideos({ channelData, isOwnChannel }: ChannelVideosProps) {
-  const videos: Video[] = ([
-    {
-      id: 1,
-      title: "Epic Minecraft Castle Build Tutorial",
-      creator: channelData.displayName,
-      views: "2.1M",
-      likes: "89K",
-      thumbnail: "/placeholder.svg?height=400&width=600",
-      duration: "15:32",
-      uploadDate: "2024-01-15",
-      category: "Tutorial",
-    },
-    {
-      id: 2,
-      title: "Advanced Redstone Mechanisms",
-      creator: channelData.displayName,
-      views: "1.5M",
-      likes: "67K",
-      thumbnail: "/placeholder.svg?height=400&width=600",
-      duration: "22:18",
-      uploadDate: "2024-01-10",
-      category: "Tutorial",
-    },
-    {
-      id: 3,
-      title: "Building Tips for Beginners",
-      creator: channelData.displayName,
-      views: "890K",
-      likes: "45K",
-      thumbnail: "/placeholder.svg?height=400&width=600",
-      duration: "12:45",
-      uploadDate: "2024-01-05",
-      category: "Guide",
-    },
-    {
-      id: 4,
-      title: "Survival World Tour",
-      creator: channelData.displayName,
-      views: "3.2M",
-      likes: "156K",
-      thumbnail: "/placeholder.svg?height=400&width=600",
-      duration: "28:30",
-      uploadDate: "2023-12-28",
-      category: "Showcase",
-    },
-    {
-      id: 5,
-      title: "Modded Minecraft Adventures",
-      creator: channelData.displayName,
-      views: "756K",
-      likes: "34K",
-      thumbnail: "/placeholder.svg?height=400&width=600",
-      duration: "35:12",
-      uploadDate: "2023-12-20",
-      category: "Gameplay",
-    },
-    {
-      id: 6,
-      title: "Community Build Challenge",
-      creator: channelData.displayName,
-      views: "1.8M",
-      likes: "78K",
-      thumbnail: "/placeholder.svg?height=400&width=600",
-      duration: "18:45",
-      uploadDate: "2023-12-15",
-      category: "Community",
-    },
-  ])
+export function ChannelVideos({ isOwnChannel }: ChannelVideosProps) {
+    const { data } = UseQueryNoToken({
+          queryKey: ['gaming'],
+          endpoint: `${process.env.NEXT_PUBLIC_API_URL_APIFY}`,
+          enabled: true,
+      });
+      const videos = Array.isArray(data) ? (data.filter((video) => video.id) as TikTokVideo[]) : [];
+  
 
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
   const [sortBy, setSortBy] = useState("newest")
@@ -224,7 +153,7 @@ export function ChannelVideos({ channelData, isOwnChannel }: ChannelVideosProps)
                     <div className="flex items-center space-x-2 text-sm text-gray-400">
                       <span className="bg-gray-800 px-2 py-1 rounded">{video.category}</span>
                       <span>•</span>
-                      <span>{new Date(video.uploadDate).toLocaleDateString()}</span>
+                      <span>{new Date(video.createTimeISO.split("T")[0]).toLocaleDateString()}</span>
                     </div>
                     {isOwnChannel && (
                       <div className="flex items-center space-x-2">
