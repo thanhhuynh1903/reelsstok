@@ -1,13 +1,13 @@
-import apiClient from "@/API/axios";
+import axios from "axios";
 
 export const login = async (email: string, password: string) => {
-  return await apiClient
-    .post("/api/login", {
+  return await axios
+    .post(`${process.env.NEXT_PUBLIC_API_URL}/api/login`, {
       email,
       password,
     })
     .then((repsonse) => {
-      try {
+      try {        
         return repsonse;
       } catch (error) {
         console.log("error", error);
@@ -21,14 +21,13 @@ export const register = async (
   email: string,
   password: string
 ) => {
-  return await apiClient
-    .post("/api/register", {
+  return await axios
+    .post(`${process.env.NEXT_PUBLIC_API_URL}/api/register`, {
       username,
       email,
       password,
     })
     .then((response) => {
-      console.log("response", response);
       return response;
     });
 };

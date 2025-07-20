@@ -28,7 +28,7 @@ export default function SignInPage() {
     dispatch(loginUser({ email, password })).then((result) => {
       if (result.meta.requestStatus === "fulfilled") {
         showSuccess("Login successfully");
-      } else {
+      } else {        
         showError("Login failed");
       }
     });
